@@ -1,0 +1,25 @@
+<project name="BlockScheme" default="dist" basedir=".">
+	<description>
+		Project for creating block schemes with computations.
+	</description>
+
+	<property name="src" location="src" />
+	<property name="build" location="build" />
+	<property name="dist" location="dest-client" />
+	<property name="doc" location="doc" />
+
+	<target name="init" description="Creates the folder structure if missing.">
+		<mkdir dir="${build}" />
+		<mkdir dir="${doc}" />
+	</target>
+
+
+	<target name="compile" depends="init" description="Compile the source code.">
+		<javac srcdir="${src}" destdir="${build}" />
+	</target>
+
+	<target name="clean" description="Cleans up built files.">
+		<delete dir="${build}" />
+		<mkdir dir="${build}" />
+	</target>
+</project>
