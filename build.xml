@@ -61,6 +61,7 @@
     </java>
     -->
     <junit printsummary="yes">
+      <formatter type="plain" usefile="false" />
       <classpath>
         <path refid="classpath"/>
         <path refid="application"/>
@@ -76,6 +77,7 @@
 
   <target name="junit" depends="jar">
       <junit printsummary="yes">
+        <formatter type="plain" usefile="false" />
           <classpath>
               <path refid="classpath"/>
               <path refid="application"/>
@@ -87,24 +89,4 @@
       </junit>
   </target>
   <target name="main" depends="clean,run" />
-
-
-  <path id="test.classpath">
-  <pathelement location="${build}" />
-  <pathelement location="lib/junit-4.12.jar" />
-  <fileset dir="${lib}">
-    <include name="**/*.jar"/>
-  </fileset>
-  <fileset dir="${build}">
-    <include name="**/*_test.jar"/>
-  </fileset>
-  </path>
-
-  <target name="test">
-    <junit fork="yes" haltonfailure="yes">
-      <test name="${test.class.name}" />
-      <formatter type="plain" usefile="false" />
-      <classpath refid="test.classpath" />
-    </junit>
-  </target>
 </project>
