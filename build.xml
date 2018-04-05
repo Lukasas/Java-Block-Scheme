@@ -1,25 +1,92 @@
-<project name="BlockScheme" default="dist" basedir=".">
+<project name="BlockSchemeApp" default="main" basedir=".">
 	<description>
 		Project for creating block schemes with computations.
 	</description>
 
-	<property name="src" location="src" />
+  <property name="main-class" value="blockscheme.BlockSchemeApp" />
+
+  <!-- Folders dynamically created. -->
 	<property name="build" location="build" />
-	<property name="dist" location="dest-client" />
+	<property name="dist" location="dist" />
 	<property name="doc" location="doc" />
 
+  <!-- Static folders -->
+  <property name="src" location="src" />
+	<property name="lib" value="lib" />
+  <!--
+  <property name="jar" location="${build}/jar" />
+  <property name="classes" location="${build}/classes" />
+  <property name="jar" location="${build}" />
+  <property name="classes" location="${build}" />
+  -->
+
+  <path id="classpath">
+    <fileset dir="${lib}" includes="**/*.jar" />
+  </path>
+   <path id="application" location="${build}/${ant.project.name}.jar"/>
+
 	<target name="init" description="Creates the folder structure if missing.">
+    <delete dir="${build}" />
+    <delete dir="${doc}" />
+    <delete dir="${dist}" />
 		<mkdir dir="${build}" />
 		<mkdir dir="${doc}" />
+    <mkdir dir="${dist}" />
 	</target>
 
-
-	<target name="compile" depends="init" description="Compile the source code.">
-		<javac srcdir="${src}" destdir="${build}" />
+	<target name="compile" depends="clean,init" description="Compile the source code.">
+		<javac srcdir="${src}" destdir="${build}" classpathref="classpath" />
 	</target>
 
-	<target name="clean" description="Cleans up built files.">
-		<delete dir="${build}" />
-		<mkdir dir="${build}" />
-	</target>
+  <!--<target name="jar"  depends="clean,compile" -->
+  <target name="jar">
+    <jar destfile="${dist}/${ant.project.name}.jar" basedir="${build}">
+      <manifest>
+        <attribute name="Main-Class" value="${main-class}" />
+      </manifest>
+    </jar>
+    <mkdir dir="${dist}/list" />
+    <copy todir="${dist}/lib">
+      <fileset dir="${lib}">
+        <include name="**/*.jar"/>
+      </fileset>
+    </copy>
+  </target>
+
+	<target name="run" description="Run tests">
+    <!--
+		<java fork="true" classname="${main-class}">
+      <classpath>
+        <path refid="classpath"/>
+        <path location="${dist}/${ant.project.name}.jar" />
+      </classpath>
+    </java>
+    -->
+    <junit printsummary="yes">
+      <classpath>
+        <path refid="classpath"/>
+        <path refid="application"/>
+      </classpath>
+
+      <batchtest fork="yes">
+        <fileset dir="${src}" includes="**/*Test.java"/>
+      </batchtest>
+    </junit>
+  </target>
+
+	<target name="clean" depends="init" description="Cleans up built files." />
+
+  <target name="junit" depends="jar">
+      <junit printsummary="yes">
+          <classpath>
+              <path refid="classpath"/>
+              <path refid="application"/>
+          </classpath>
+
+          <batchtest fork="yes">
+              <fileset dir="${src}" includes="**/*Test.java"/>
+          </batchtest>
+      </junit>
+  </target>
+  <target name="main" depends="clean,run" />
 </project>
