@@ -3,14 +3,14 @@ import blockscheme.BaseBlock;
 import blockscheme.Port;
 
 import java.util.ArrayList;
-public class BlockAdd extends BaseBlock
+public class BlockDiv extends BaseBlock
 {
-	public BlockAdd()
+	public BlockDiv()
 	{
 		this.createPorts();
 	}
 
-	public BlockAdd(double val1, double val2)
+	public BlockDiv(double val1, double val2)
 	{
 		this.createPorts();
 		ArrayList<Double> vals = new ArrayList<Double>();
@@ -31,9 +31,9 @@ public class BlockAdd extends BaseBlock
 	@Override
 	public void calculate() throws Exception
 	{		
-		// this.outputs.get(0).hodnota = this.inputs.get(0).hodnota + this.inputs.get(1).hodnota;
-		//System.out.format("%f", this.outputs.get(0).hodnota);
-		this.outputs.get(0).set(this.inputs.get(0).get() + this.inputs.get(1).get());
+		if (this.inputs.get(1).get() == 0.0)
+			throw new Exception("Dividing by zero!!");			
 
+		this.outputs.get(0).set(this.inputs.get(0).get() / this.inputs.get(1).get());
 	}
 }

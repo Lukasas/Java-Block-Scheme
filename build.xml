@@ -26,11 +26,9 @@
 
 	<target name="init" description="Creates the folder structure if missing.">
     <delete dir="${build}" />
-    <delete dir="${doc}" />
-    <delete dir="${dist}" />
+    <!-- <delete dir="${doc}" /> -->
 		<mkdir dir="${build}" />
-		<mkdir dir="${doc}" />
-    <mkdir dir="${dist}" />
+		<!-- <mkdir dir="${doc}" /> -->
 	</target>
 
 	<target name="compile" depends="clean,init" description="Compile the source code.">

@@ -3,14 +3,14 @@ import blockscheme.BaseBlock;
 import blockscheme.Port;
 
 import java.util.ArrayList;
-public class BlockAdd extends BaseBlock
+public class BlockSub extends BaseBlock
 {
-	public BlockAdd()
+	public BlockSub()
 	{
 		this.createPorts();
 	}
 
-	public BlockAdd(double val1, double val2)
+	public BlockSub(double val1, double val2)
 	{
 		this.createPorts();
 		ArrayList<Double> vals = new ArrayList<Double>();
@@ -33,7 +33,6 @@ public class BlockAdd extends BaseBlock
 	{		
 		// this.outputs.get(0).hodnota = this.inputs.get(0).hodnota + this.inputs.get(1).hodnota;
 		//System.out.format("%f", this.outputs.get(0).hodnota);
-		this.outputs.get(0).set(this.inputs.get(0).get() + this.inputs.get(1).get());
-
+		this.outputs.get(0).set(this.inputs.get(0).get() - this.inputs.get(1).get());
 	}
 }
