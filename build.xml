@@ -4,7 +4,6 @@
 	</description>
 
   <property name="main-class" value="blockscheme.BlockSchemeApp" />
-
   <!-- Folders dynamically created. -->
 	<property name="build" location="build" />
 	<property name="dist" location="dist" />
@@ -12,7 +11,7 @@
 
   <!-- Static folders -->
   <property name="src" location="src" />
-	<property name="lib" value="lib" />
+	<property name="lib" location="lib" />
   <!--
   <property name="jar" location="${build}/jar" />
   <property name="classes" location="${build}/classes" />
@@ -38,22 +37,21 @@
 		<javac srcdir="${src}" destdir="${build}" classpathref="classpath" />
 	</target>
 
-  <!--<target name="jar"  depends="clean,compile" -->
-  <target name="jar">
-    <jar destfile="${dist}/${ant.project.name}.jar" basedir="${build}">
+  <target name="jar"  depends="clean,compile">
+    <jar destfile="${build}/${ant.project.name}.jar" basedir="${build}">
       <manifest>
         <attribute name="Main-Class" value="${main-class}" />
       </manifest>
     </jar>
-    <mkdir dir="${dist}/list" />
-    <copy todir="${dist}/lib">
+    <mkdir dir="${build}/lib" />
+    <copy todir="${build}/lib">
       <fileset dir="${lib}">
         <include name="**/*.jar"/>
       </fileset>
     </copy>
   </target>
 
-	<target name="run" description="Run tests">
+	<target name="run" depends="jar" description="Run tests">
     <!--
 		<java fork="true" classname="${main-class}">
       <classpath>
@@ -69,7 +67,7 @@
       </classpath>
 
       <batchtest fork="yes">
-        <fileset dir="${src}" includes="**/*Test.java"/>
+        <fileset dir="${src}" includes="**/*_test.java"/>
       </batchtest>
     </junit>
   </target>
@@ -84,9 +82,29 @@
           </classpath>
 
           <batchtest fork="yes">
-              <fileset dir="${src}" includes="**/*Test.java"/>
+              <fileset dir="${src}" includes="**/*_test.java"/>
           </batchtest>
       </junit>
   </target>
   <target name="main" depends="clean,run" />
+
+
+  <path id="test.classpath">
+  <pathelement location="${build}" />
+  <pathelement location="lib/junit-4.12.jar" />
+  <fileset dir="${lib}">
+    <include name="**/*.jar"/>
+  </fileset>
+  <fileset dir="${build}">
+    <include name="**/*_test.jar"/>
+  </fileset>
+  </path>
+
+  <target name="test">
+    <junit fork="yes" haltonfailure="yes">
+      <test name="${test.class.name}" />
+      <formatter type="plain" usefile="false" />
+      <classpath refid="test.classpath" />
+    </junit>
+  </target>
 </project>

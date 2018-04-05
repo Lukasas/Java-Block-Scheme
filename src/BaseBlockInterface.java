@@ -1,3 +1,5 @@
+package blockscheme;
+import blockscheme.Port;
 
 public interface BaseBlockInterface
 {
@@ -5,12 +7,13 @@ public interface BaseBlockInterface
 	* This method sets all inputs for specific block.
 	* @return Nothing.
 	*/
-	void setInputs(/* Some collection of inputs. */);
+	public void setInputs(Port[] inputs);
+
 
 	/**
-	* This method calculates output value accordingly to the inputs.
+	* This method calculates outputs value accordingly to the inputs.
 	* It contains the calculation formula.
-	* @return double Returns output value for this block.
+	* @return Nothing
 	*/
-	double operate();
+	public void calculate();
 }
