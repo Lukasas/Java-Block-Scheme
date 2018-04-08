@@ -10,6 +10,8 @@ import blockscheme.BlockSub;
 import blockscheme.BlockMul;
 import blockscheme.BlockDiv;
 import blockscheme.Port;
+import blockscheme.BlockNode;
+
 public class Blocks_test
 {
 	@Test
@@ -66,5 +68,20 @@ public class Blocks_test
 		BlockDiv block = new BlockDiv(8.0, 4.0);
 		block.calculate();
 		assertEquals(Double.valueOf(2.0), block.getOutput().get("Y"), 0.1);
+	}
+
+	@Test
+	public void testConnection() throws Exception
+	{
+		BlockAdd ba = new BlockAdd(2.0, 3.0);
+		BlockMul bm = new BlockMul();
+		bm.getInput().set("B", 2.0);
+		BlockNode head = new BlockNode(bm);
+		BlockNode ban = new BlockNode(ba);
+		head.AddSubNode(ban);
+		head.Connect("Y", "A", ba);
+		head.Compute();
+
+		assertEquals(10.0, bm.getOutput().get("Y"), 0.1);
 	}
 }
