@@ -1,7 +1,7 @@
 package blockscheme;
 
 import java.util.HashMap;
-
+import java.util.Set;
 public class Port
 {
 	private HashMap<String, Double> data = new HashMap<String, Double>();
@@ -16,6 +16,11 @@ public class Port
 	public void set(String nazev, Double hodnota)
 	{
 		this.data.put(nazev, hodnota);
+	}
+
+	public Set<String> getKeys()
+	{
+		return this.data.keySet();
 	}
 
 	public void remove(String nazev)

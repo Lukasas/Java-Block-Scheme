@@ -16,6 +16,12 @@ public class BaseBlock implements BaseBlockInterface
 	}
 
 	@Override
+	public Port getInput()
+	{
+		return this.input;
+	}	
+
+	@Override
 	public Port getOutput()
 	{
 		return this.output;

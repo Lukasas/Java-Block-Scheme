@@ -16,10 +16,16 @@ public interface BaseBlockInterface
 	public void createPorts();
 
 	/**
-	* This method returns an ArrayList of doubles as outputs.
+	* This method returns output port.
 	* @return Port
 	*/
 	public Port getOutput();
+
+	/**
+	* This method returns input port.
+	* @return Port
+	*/
+	public Port getInput();
 
 	/**
 	* This method returns size of output. (Type)
