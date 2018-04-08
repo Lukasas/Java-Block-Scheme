@@ -1,37 +1,35 @@
 package blockscheme;
+
+import java.util.HashMap;
+
 public class Port
 {
+	private HashMap<String, Double> data = new HashMap<String, Double>();
 	private String nazev; 
 	private Double hodnota;
-	public Port()
+
+	public void add(String nazev)
 	{
-		this.nazev = "Unknown";
-		this.hodnota = 0.0;
+		this.data.put(nazev, 0.0);
 	}
 
-	public Port(String nazev, Double hodnota)
+	public void set(String nazev, Double hodnota)
 	{
-		this.nazev = nazev;
-		this.hodnota = hodnota;
+		this.data.put(nazev, hodnota);
 	}
 
-	public void set(Double hodnota)
+	public void remove(String nazev)
 	{
-		this.hodnota = hodnota;
+		this.data.remove(nazev);
 	}
 
-	public Double get()
+	public Double get(String nazev)
 	{
-		return this.hodnota;
+		return this.data.get(nazev);
 	}
 
-	public String getName()
+	public int PortSize()
 	{
-		return nazev;
-	}
-
-	public void setName(String nazev)
-	{
-		this.nazev = nazev;
+		return this.data.size();
 	}
 }

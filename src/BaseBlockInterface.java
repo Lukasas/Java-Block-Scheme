@@ -4,22 +4,34 @@ import java.util.ArrayList;
 public interface BaseBlockInterface
 {
 	/**
-	* This method sets all inputs for specific block.
+	* This method sets input port.
 	* @return Nothing.
 	*/
-	public void setInputs(ArrayList<Double> inputs);
+	public void setInput(Port port);
 
 	/**
-	* This method creates ports for inputs and outputs.
+	* This method creates input and output port.
 	* @return Nothing.
 	*/
 	public void createPorts();
 
 	/**
 	* This method returns an ArrayList of doubles as outputs.
-	* @return ArrayList<Double>
+	* @return Port
 	*/
-	public ArrayList<Double> getOutput();
+	public Port getOutput();
+
+	/**
+	* This method returns size of output. (Type)
+	* @return Int size of output
+	*/
+	public int outputSize();
+
+	/**
+	* This method returns size of input. (Type)
+	* @return Int size of input
+	*/
+	public int inputSize();
 
 	/**
 	* This method calculates outputs value accordingly to the inputs.

@@ -6,42 +6,39 @@ import java.util.ArrayList;
 
 public class BaseBlock implements BaseBlockInterface
 {
-	protected ArrayList<Port> inputs = new ArrayList<Port>();
-	protected ArrayList<Port> outputs = new ArrayList<Port>();
-	protected double result;
-	protected int iPortCount = 0;
-	protected int oPortCount = 0;
+	protected Port input = new Port();
+	protected Port output = new Port();
 
-	/**
-	* This method creates input and output ports.
-	* @return Nothing.
-	*/
 	@Override
-	public void createPorts()
+	public void setInput(Port port)
 	{
-		this.iPortCount = 2;
-		this.inputs.add(new Port("First Value", 0.0));
-		this.inputs.add(new Port("Second Value", 0.0));
-		this.oPortCount = 1;
-		this.outputs.add(new Port("Output Value", 0.0));
+		this.input = port;
 	}
 
-
-	/**
-	* This method sets all inputs for specific block.
-	* @return Nothing.
-	*/
 	@Override
-	public void setInputs(ArrayList<Double> inputs)
-	{}
-
-	@Override
-	public ArrayList<Double> getOutput()
+	public Port getOutput()
 	{
-		ArrayList<Double> outs = new ArrayList<Double>();
-		for (int i = 0; i < this.oPortCount; i++)
-			outs.add(this.outputs.get(i).get());
-		return outs;
+		return this.output;
+	}
+
+	@Override
+	public int outputSize()
+	{
+		return this.output.PortSize();
+	}
+
+	@Override
+	public int inputSize()
+	{
+		return this.input.PortSize();
+	}
+
+	@Override
+	public void createPorts()
+	{	
+		this.input.add("A");
+		this.input.add("B");
+		this.output.add("Y");
 	}
 
 	/**
