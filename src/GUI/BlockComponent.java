@@ -2,13 +2,10 @@ package GUI;
 
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 
 
 import blockscheme.*;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
@@ -17,8 +14,9 @@ public class BlockComponent extends Label
 {
 	private BaseBlock block;
 	final double[] dragDelta = new double[2];
-	BlockComponent me;
-	boolean move = true;
+	private BlockComponent me;
+
+
 	public BlockComponent()
 	{
 	    setText("Hey");
