@@ -1,44 +1,71 @@
 package GUI;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 
 
 import blockscheme.*;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
+import javafx.scene.control.ContextMenu;
 
-public class BlockComponent extends Label
-{
-	private BaseBlock block;
-	final double[] dragDelta = new double[2];
-	private BlockComponent me;
+public class BlockComponent extends Label {
+    private BaseBlock block;
+    final double[] dragDelta = new double[2];
+    private BlockComponent me;
+    final ContextMenu contextMenu = new ContextMenu();
 
+    static boolean connecting = false;
 
-	public BlockComponent()
-	{
-	    setText("Hey");
-		me = this;
+    static BlockConnectionBuilder BCB;
+
+    public BlockComponent() {
+        MenuItem item = new MenuItem("Input X");
+        item.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                if (!connecting) {
+                    if (BCB == null) {
+                        BCB = new BlockConnectionBuilder();
+                        ((Pane) getParent()).getChildren().add(BCB);
+
+                    }
+                    connecting = true;
+                    BCB.setUiStart(me);
+                }
+            }
+        });
+        contextMenu.getItems().add(item);
+
+        setText("Hey");
+        me = this;
 //		this.block = block;
-		setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-			    switch (event.getButton())
-                {
+        setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                switch (event.getButton()) {
                     case PRIMARY:
                         dragDelta[0] = me.getLayoutX() - event.getSceneX();
                         dragDelta[1] = me.getLayoutY() - event.getSceneY();
                         me.setCursor(Cursor.MOVE);
                         break;
+                    case SECONDARY: {
+                        if (!connecting) {
+                            contextMenu.show(me, event.getScreenX(), event.getScreenY());
+                        }
+                    }
+                    break;
                 }
-			}
-		});
+            }
+        });
 
-		setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+        setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY: {
 
@@ -63,23 +90,26 @@ public class BlockComponent extends Label
                     break;
                 }
             }
-		});
+        });
 
         setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY:
-                    me.setCursor(Cursor.DEFAULT);
-                    break;
+                        me.setCursor(Cursor.DEFAULT);
+                        break;
                     case SECONDARY:
+                        if (connecting) {
+                            System.out.println("Boop");
+                            connecting = false;
+                            BCB.setUiEnd(me);
+                        }
                         break;
                 }
             }
         });
 
 
-
-	}
-
+    }
 }
