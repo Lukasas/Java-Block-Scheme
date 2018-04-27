@@ -7,6 +7,7 @@ public class BlockAdd extends BaseBlock
 {
 	public BlockAdd()
 	{
+		this.name = "BlockAdd";
 		this.createPorts();
 	}
 

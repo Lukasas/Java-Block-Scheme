@@ -3,7 +3,7 @@
 		Project for creating block schemes with computations.
 	</description>
 
-  <property name="main-class" value="blockscheme.BlockSchemeApp" />
+  <property name="main-class" value="GUI.BlockSchemeApp" />
   <!-- Folders dynamically created. -->
 	<property name="build" location="build" />
 	<property name="dest" location="dest" />
