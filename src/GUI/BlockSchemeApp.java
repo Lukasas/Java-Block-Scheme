@@ -29,7 +29,7 @@ public class BlockSchemeApp extends Application
 		stage.setTitle("Block Scheme Application");
 		BlockAdd ba = new BlockAdd();
 
-		BlockComponent bc = new BlockComponent();
+		BlockComponent bc = new BlockComponent(ba);
 		GridPane grid = new GridPane();
 		grid.add(bc, 0, 0);
 		grid.setHgap(0);

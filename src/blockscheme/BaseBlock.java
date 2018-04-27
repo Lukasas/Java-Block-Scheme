@@ -8,7 +8,7 @@ public class BaseBlock implements BaseBlockInterface
 {
 	protected Port input = new Port();
 	protected Port output = new Port();
-
+	protected String name = "none";
 	@Override
 	public void setInput(Port port)
 	{
