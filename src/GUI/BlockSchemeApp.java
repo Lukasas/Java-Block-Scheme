@@ -1,42 +1,77 @@
-package blockscheme;
+package GUI;
 
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import javafx.scene.layout.GridPane;
-// import javafx.scene.control.Pos;
-import javax.swing.JPanel;
-import blockscheme.*;
-import javafx.scene.Node;
-import javafx.scene.control.Label;
+
+public class BlockSchemeApp extends Application {
+    HBox blockControls;
+    Pane canvas;
 
 
-public class BlockSchemeApp extends Application
-{
+    public static void main(String[] args)
+    {
+        launch(args);
+    }
 
+    private void CreateBlockSection()
+    {
+        blockControls = new HBox();
+        blockControls.setPadding(new Insets(15, 12, 15, 12));
+        blockControls.setSpacing(10);
+        blockControls.setStyle("-fx-background-color: #336699;");
+        Button buttonBlockAdd = new Button("BlockAdd");
+        buttonBlockAdd.setPrefSize(100, 20);
+        buttonBlockAdd.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockComponent buttonBlockAddw = new BlockComponent();
+                buttonBlockAdd.setPrefSize(100, 20);
+                canvas.getChildren().add(buttonBlockAddw);
+            }
+        });
 
-	public static void main(String[] args)
-	{
+        Button buttonProjected = new Button("BlockSub");
+        buttonProjected.setPrefSize(100, 20);
+        blockControls.getChildren().addAll(buttonBlockAdd, buttonProjected);
+    }
 
-		System.out.println("Hello World.");
+    private void ListAllControls()
+    {
 
-		launch(args);
-	}
+    }
 
-	@Override
-	public void start(Stage stage)
-	{
-		stage.setTitle("Block Scheme Application");
-		BlockAdd ba = new BlockAdd();
+    @Override
+    public void start(Stage stage) {
+        Group root = new Group();
+        Scene scene = new Scene(root);
+        canvas = new Pane();
+        canvas.setStyle("-fx-background-color: #BCCCFF;");
+        CreateBlockSection();
 
-		BlockComponent bc = new BlockComponent(ba);
-		GridPane grid = new GridPane();
-		grid.add(bc, 0, 0);
-		grid.setHgap(0);
-		grid.setVgap(0);
+        stage.setTitle("Block Scheme");
+        stage.setWidth(800);
+        stage.setHeight(600);
 
-		Scene scene = new Scene(grid, 1280, 720);
-		stage.setScene(scene);
-		stage.show();
-	}
+        BorderPane border = new BorderPane();
+        border.prefHeightProperty().bind(scene.heightProperty());
+        border.prefWidthProperty().bind(scene.widthProperty());
+
+        border.setStyle("-fx-background-color: #FFCCCB;");
+        border.setTop(blockControls);
+        border.setCenter(canvas);
+
+        root.getChildren().add(border);
+
+        stage.setScene(scene);
+        stage.show();
+    }
 }
