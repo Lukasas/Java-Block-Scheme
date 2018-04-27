@@ -2,3 +2,4 @@ build
 dest
 doc
 *.zip
+/bin/

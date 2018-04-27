@@ -7,7 +7,7 @@ public class BlockAdd extends BaseBlock
 {
 	public BlockAdd()
 	{
-	this.createPorts();
+		this.createPorts();
 	}
 
 	public BlockAdd(double val1, double val2)

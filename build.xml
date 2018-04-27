@@ -61,7 +61,7 @@
     </copy>
   </target> -->
 
-  <target name="run" description="Run tests">
+  <target name="run" depends="compile" description="Run tests">
     <java fork="true" classname="${main-class}">
       <classpath>
         <path refid="classpath"/>
