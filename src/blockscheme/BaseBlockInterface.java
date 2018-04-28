@@ -32,11 +32,18 @@ public interface BaseBlockInterface
     void SetOutput(int index, Port p);
 
     /**
+     * Get Port of selected index.
+     * @param index Index in ArrayList of the port to be returned
+     * @return Port object that can be used in propagation.
+     */
+    Port GetInput(int index);
+
+    /**
      * Calculated output Port
-     * @param portName Name of the port to be returned
+     * @param index Index in ArrayList of the port to be returned
      * @return Calculated values in Port
      */
-    Port GetOutput(String portName);
+    Port GetOutput(int index);
 
     /**
      * Creates text output for each block.

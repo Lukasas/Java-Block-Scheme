@@ -33,13 +33,22 @@ public class BlockComponent extends Label {
         getTooltip().textProperty().bind(block.blockTextOutputProperty());
     }
 
+    private int GetIndexFromMenuItem(Object item)
+    {
+        MenuItem i = ((MenuItem)item);
+        return Integer.valueOf(i.getText().substring(0, i.getText().indexOf(' ')));
+    }
+
     private void CreatePins() {
         for (int i = 0; i < block.GetInputNames().size(); i++) {
             MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetInputNames().get(i)));
             item.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    connecting = true;
+                    connecting = true; // This will cause problems later when user click an actual action, there is no skip.
+                    BCB = new BlockConnectionBuilder();
+                    BCB.setUiStart(me, block.GetInput(GetIndexFromMenuItem(event.getSource())));
+                    event.consume();
                 }
             });
             contextMenuInputs.getItems().add(item);
@@ -50,6 +59,9 @@ public class BlockComponent extends Label {
                 @Override
                 public void handle(ActionEvent event) {
                     connecting = false;
+                    BCB.setUiEnd(me, block.GetOutput(GetIndexFromMenuItem(event.getSource())));
+                    ((Pane) getParent()).getChildren().add(BCB);
+                    event.consume();
                 }
             });
             contextMenuOutputs.getItems().add(item);
@@ -141,14 +153,6 @@ public class BlockComponent extends Label {
                 switch (event.getButton()) {
                     case PRIMARY:
                         me.setCursor(Cursor.DEFAULT);
-                        break;
-                    case SECONDARY:
-//                        if (connecting) {
-//                            connecting = false;
-//                            BCB.setUiEnd(me);
-//                            BlockSchemeGui.AddBCB(BCB);
-//                            BCB = null;
-//                        }
                         break;
                 }
             }

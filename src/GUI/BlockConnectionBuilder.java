@@ -1,6 +1,7 @@
 package GUI;
 
 
+import blockscheme.ports.Port;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -10,7 +11,7 @@ import sun.security.ssl.Debug;
 public class BlockConnectionBuilder extends Line {
     private BlockComponent uiStart; // Output
     private BlockComponent uiEnd; // Input
-
+    private Cable connection = new Cable();
     private double value;
 
     public double getValue() {
@@ -37,15 +38,17 @@ public class BlockConnectionBuilder extends Line {
         setEndY(y);
     }
 
-    public void setUiStart(BlockComponent component) {
+    public void setUiStart(BlockComponent component, Port output) {
         uiStart = component;
+        connection.start = output;
         startXProperty().bind(component.layoutXProperty());
         startYProperty().bind(component.layoutYProperty());
 
     }
 
-    public void setUiEnd(BlockComponent component) {
+    public void setUiEnd(BlockComponent component, Port input) {
         uiEnd = component;
+        connection.start = input;
         endXProperty().bind(component.layoutXProperty());
         endYProperty().bind(component.layoutYProperty());
     }

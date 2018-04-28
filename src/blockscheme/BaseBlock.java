@@ -27,6 +27,7 @@ public class BaseBlock implements BaseBlockInterface
 	    return null;
 	}
 
+	@Override
     public void SetInput(int index, Port p) {
         if (index >= input.size())
             throw new RuntimeException("Setting input index out of range.");
@@ -35,6 +36,7 @@ public class BaseBlock implements BaseBlockInterface
         TextOutput();
     }
 
+    @Override
     public void SetOutput(int index, Port p) {
         if (index >= output.size())
             throw new RuntimeException("Setting output index out of range.");
@@ -44,13 +46,13 @@ public class BaseBlock implements BaseBlockInterface
     }
 
     @Override
-    public Port GetOutput(String portName) {
-        for (Port p :
-                output) {
-            if (p.IsCalled(portName))
-                return p;
-        }
-        return null;
+    public Port GetInput(int index) {
+        return input.get(index);
+    }
+
+    @Override
+    public Port GetOutput(int index) {
+        return output.get(index);
     }
 
 
