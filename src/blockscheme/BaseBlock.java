@@ -1,5 +1,7 @@
 package blockscheme;
 import blockscheme.ports.Port;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -7,13 +9,22 @@ import java.util.Set;
 
 public class BaseBlock implements BaseBlockInterface
 {
-	protected ArrayList<Port> input;
-	protected ArrayList<Port> output;
+	protected ArrayList<Port> input = new ArrayList<>();
+	protected ArrayList<Port> output = new ArrayList<>();
 	protected String name = "none";
+
+	protected StringProperty BlockTextOutput = new SimpleStringProperty();
+    public StringProperty blockTextOutputProperty()
+    {
+        TextOutput();
+        return BlockTextOutput;
+    }
+
+
 
 	@Override
 	public String TextOutput() {
-		return null;
+	    return null;
 	}
 
     public void SetInput(int index, Port p) {
