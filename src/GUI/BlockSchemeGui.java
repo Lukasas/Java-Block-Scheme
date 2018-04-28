@@ -31,8 +31,15 @@ public class BlockSchemeGui {
     /**
      * Find Start and End point
      */
-    public static void FindEnds()
-    {
+    public static void FindEnds() {
 
+    }
+
+    public static void Propagate()
+    {
+        for (BlockConnectionBuilder bcb :
+                BCBList) {
+            bcb.Propagate();
+        }
     }
 }

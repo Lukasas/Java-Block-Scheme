@@ -45,9 +45,9 @@ public class BlockComponent extends Label {
             item.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    connecting = true; // This will cause problems later when user click an actual action, there is no skip.
-                    BCB = new BlockConnectionBuilder();
-                    BCB.setUiStart(me, block.GetInput(GetIndexFromMenuItem(event.getSource())));
+                    connecting = false; // This will cause problems later when user click an actual action, there is no skip.
+                    BCB.setUiEnd(me, block.GetInput(GetIndexFromMenuItem(event.getSource())));
+                    BlockSchemeGui.AddBCB(BCB);
                     event.consume();
                 }
             });
@@ -58,8 +58,9 @@ public class BlockComponent extends Label {
             item.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    connecting = false;
-                    BCB.setUiEnd(me, block.GetOutput(GetIndexFromMenuItem(event.getSource())));
+                    connecting = true;
+                    BCB = new BlockConnectionBuilder();
+                    BCB.setUiStart(me, block.GetOutput(GetIndexFromMenuItem(event.getSource())));
                     ((Pane) getParent()).getChildren().add(BCB);
                     event.consume();
                 }
@@ -104,9 +105,10 @@ public class BlockComponent extends Label {
                         dragDelta[0] = me.getLayoutX() - event.getSceneX();
                         dragDelta[1] = me.getLayoutY() - event.getSceneY();
                         me.setCursor(Cursor.MOVE);
+                        block.calculate();
                         break;
                     case SECONDARY: {
-                        if (!connecting)
+                        if (connecting)
                             contextMenuInputs.show(me, event.getScreenX(), event.getScreenY());
                         else
                             contextMenuOutputs.show(me, event.getScreenX(), event.getScreenY());

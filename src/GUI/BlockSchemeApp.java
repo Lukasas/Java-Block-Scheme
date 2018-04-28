@@ -65,7 +65,7 @@ public class BlockSchemeApp extends Application {
         buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockSchemeGui.ListAll();
+                BlockSchemeGui.Propagate();
             }
         });
 

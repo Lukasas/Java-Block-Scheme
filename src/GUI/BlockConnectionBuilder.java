@@ -12,30 +12,12 @@ public class BlockConnectionBuilder extends Line {
     private BlockComponent uiStart; // Output
     private BlockComponent uiEnd; // Input
     private Cable connection = new Cable();
-    private double value;
 
-    public double getValue() {
-        return value;
-    }
 
     public BlockConnectionBuilder() {
         super();
         setStrokeWidth(2.0f);
         setStroke(Color.RED);
-    }
-
-    public void setValue(double value) {
-        this.value = value;
-    }
-
-    public void setStart(double x, double y) {
-        setStartX(x);
-        setStartY(y);
-    }
-
-    public void setEnd(double x, double y) {
-        setEndX(x);
-        setEndY(y);
     }
 
     public void setUiStart(BlockComponent component, Port output) {
@@ -48,7 +30,7 @@ public class BlockConnectionBuilder extends Line {
 
     public void setUiEnd(BlockComponent component, Port input) {
         uiEnd = component;
-        connection.start = input;
+        connection.end = input;
         endXProperty().bind(component.layoutXProperty());
         endYProperty().bind(component.layoutYProperty());
     }
@@ -60,4 +42,11 @@ public class BlockConnectionBuilder extends Line {
     public BlockComponent getUiEnd() {
         return uiEnd;
     }
+
+    public void Propagate()
+    {
+        connection.Propagate();
+
+    }
+
 }
