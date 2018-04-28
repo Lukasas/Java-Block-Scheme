@@ -28,19 +28,6 @@ public class BlockYYMakeAB extends BaseBlock {
 
     }
 
-    public void SetInput(int index, Port p) {
-        if (index >= input.size())
-            throw new RuntimeException("Setting input index out of range.");
-
-        input.get(index).CopyData(p);
-    }
-
-    public void SetOutput(int index, Port p) {
-        if (index >= output.size())
-            throw new RuntimeException("Setting output index out of range.");
-
-        output.get(index).CopyData(p);
-    }
 
     public String TextOuptut()
     {

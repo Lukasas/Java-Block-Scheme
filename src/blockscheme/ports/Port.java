@@ -51,4 +51,9 @@ public class Port
             set(key, clone.get(key));
         }
     }
+
+    public boolean IsCalled(String name){
+	    return nazev.compareTo(name) == 0;
+    }
+
 }
