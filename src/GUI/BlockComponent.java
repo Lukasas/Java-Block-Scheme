@@ -1,5 +1,6 @@
 package GUI;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -8,6 +9,7 @@ import javafx.scene.Cursor;
 import blockscheme.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
@@ -15,16 +17,24 @@ import javafx.scene.control.ContextMenu;
 
 public class BlockComponent extends Label {
     private BaseBlock block;
-    final double[] dragDelta = new double[2];
+    private final double[] dragDelta = new double[2];
     private BlockComponent me;
-    final ContextMenu contextMenu = new ContextMenu();
+    private final ContextMenu contextMenu = new ContextMenu();
+    private static int counter = 0;
+    private static boolean connecting = false;
 
-    static boolean connecting = false;
+    public String name;
 
-    static BlockConnectionBuilder BCB;
+    private static BlockConnectionBuilder BCB;
+
+    private void SetTooltipText()
+    {
+        getTooltip().setText("Input X: 5\nOutput Y: -5");
+    }
 
     public BlockComponent() {
         MenuItem item = new MenuItem("Input X");
+        MenuItem item2 = new MenuItem("Output Y");
         item.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -39,8 +49,11 @@ public class BlockComponent extends Label {
                 }
             }
         });
-        contextMenu.getItems().add(item);
 
+        name = "Test " + String.valueOf(counter++);
+        contextMenu.getItems().addAll(item, item2);
+        setTooltip(new Tooltip("Tooltip Test"));
+        SetTooltipText();
         setText("Hey");
         me = this;
 //		this.block = block;
@@ -101,9 +114,10 @@ public class BlockComponent extends Label {
                         break;
                     case SECONDARY:
                         if (connecting) {
-                            System.out.println("Boop");
                             connecting = false;
                             BCB.setUiEnd(me);
+                            BlockSchemeGui.AddBCB(BCB);
+                            BCB = null;
                         }
                         break;
                 }

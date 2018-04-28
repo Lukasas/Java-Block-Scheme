@@ -8,8 +8,8 @@ import javafx.scene.shape.Line;
 import sun.security.ssl.Debug;
 
 public class BlockConnectionBuilder extends Line {
-    private BlockComponent uiStart;
-    private BlockComponent uiEnd;
+    private BlockComponent uiStart; // Output
+    private BlockComponent uiEnd; // Input
 
     private double value;
 
@@ -22,7 +22,6 @@ public class BlockConnectionBuilder extends Line {
         setStrokeWidth(2.0f);
         setStroke(Color.RED);
     }
-
 
     public void setValue(double value) {
         this.value = value;
@@ -49,5 +48,13 @@ public class BlockConnectionBuilder extends Line {
         uiEnd = component;
         endXProperty().bind(component.layoutXProperty());
         endYProperty().bind(component.layoutYProperty());
+    }
+
+    public BlockComponent getUiStart() {
+        return uiStart;
+    }
+
+    public BlockComponent getUiEnd() {
+        return uiEnd;
     }
 }
