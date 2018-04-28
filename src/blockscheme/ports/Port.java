@@ -1,34 +1,38 @@
-package blockscheme;
+package blockscheme.ports;
 
 import java.util.HashMap;
 import java.util.Set;
 public class Port
 {
 	private HashMap<String, Double> data = new HashMap<String, Double>();
-	private String nazev; 
-	private Double hodnota;
+	protected String nazev;
 
-	public void add(String nazev)
+	public Port()
+    {
+        createPortData();
+    }
+
+	protected void add(String nazev)
 	{
 		this.data.put(nazev, 0.0);
 	}
 
-	public void set(String nazev, Double hodnota)
+	protected void set(String nazev, Double hodnota)
 	{
 		this.data.put(nazev, hodnota);
 	}
 
-	public Set<String> getKeys()
+	protected Set<String> getKeys()
 	{
 		return this.data.keySet();
 	}
 
-	public void remove(String nazev)
+	protected void remove(String nazev)
 	{
 		this.data.remove(nazev);
 	}
 
-	public Double get(String nazev)
+	protected Double get(String nazev)
 	{
 		return this.data.get(nazev);
 	}
@@ -37,4 +41,14 @@ public class Port
 	{
 		return this.data.size();
 	}
+
+    protected void createPortData() {}
+
+    public void CopyData(Port clone)
+    {
+        for (String key :
+                clone.getKeys()) {
+            set(key, clone.get(key));
+        }
+    }
 }
