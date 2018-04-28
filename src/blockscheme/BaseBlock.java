@@ -1,7 +1,9 @@
 package blockscheme;
 import blockscheme.ports.Port;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class BaseBlock implements BaseBlockInterface
 {
@@ -36,6 +38,28 @@ public class BaseBlock implements BaseBlockInterface
                 return p;
         }
         return null;
+    }
+
+
+    protected ArrayList<String> StringerizeArray(ArrayList<Port> in)
+    {
+        ArrayList<String> inputNames = new ArrayList<>();
+
+        for (Port p :
+                in) {
+            inputNames.add(p.getName());
+        }
+        return inputNames;
+    }
+
+    @Override
+    public ArrayList<String> GetInputNames() {
+        return StringerizeArray(input);
+    }
+
+    @Override
+    public ArrayList<String> GetOutputNames() {
+        return StringerizeArray(output);
     }
 
     /**
