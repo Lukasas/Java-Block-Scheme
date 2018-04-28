@@ -1,5 +1,7 @@
 package GUI;
 
+import blockscheme.BlockAdd;
+import blockscheme.BlockYYMakeAB;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -36,15 +38,21 @@ public class BlockSchemeApp extends Application {
         buttonBlockAdd.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockComponent buttonBlockAddw = new BlockComponent();
-                buttonBlockAdd.setPrefSize(100, 20);
+                BlockComponent buttonBlockAddw = new BlockComponent(new BlockAdd());
                 canvas.getChildren().add(buttonBlockAddw);
             }
         });
 
-        Button buttonProjected = new Button("BlockSub");
-        buttonProjected.setPrefSize(100, 20);
-        blockControls.getChildren().addAll(buttonBlockAdd, buttonProjected);
+        Button buttonBlockYYAB = new Button("BlockYYMakeAB");
+        buttonBlockYYAB.setPrefSize(100, 20);
+        buttonBlockYYAB.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockComponent buttonBlockYYAB = new BlockComponent(new BlockYYMakeAB());
+                canvas.getChildren().add(buttonBlockYYAB);
+            }
+        });
+        blockControls.getChildren().addAll(buttonBlockAdd, buttonBlockYYAB);
     }
 
     private void CreateBlockDebug() {

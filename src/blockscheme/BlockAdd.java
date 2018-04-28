@@ -13,6 +13,7 @@ package blockscheme;
 import blockscheme.ports.ABPort;
 import blockscheme.ports.YPort;
 
+
 public class BlockAdd extends BaseBlock {
 	ABPort ab;
 	YPort y;
@@ -23,10 +24,16 @@ public class BlockAdd extends BaseBlock {
 		output.add(y);
 	}
 
+    @Override
+    public String TextOutput() {
+	    BlockTextOutput.set("Add");
+        return "Add";
+    }
 
-	@Override
+    @Override
 	public void calculate() throws Exception {
 		super.calculate();
 		y.setY(ab.getA() + ab.getB());
+        TextOutput();
 	}
 }

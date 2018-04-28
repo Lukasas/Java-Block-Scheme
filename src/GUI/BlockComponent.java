@@ -27,25 +27,22 @@ public class BlockComponent extends Label {
     public BlockComponent output;
 
 
-
     public String name;
 
     private static BlockConnectionBuilder BCB;
 
-    private void SetTooltipText()
-    {
-        getTooltip().setText("Input X: 5\nOutput Y: -5");
+    private void SetTooltipText() {
+        getTooltip().textProperty().bind(block.blockTextOutputProperty());
     }
 
-    private void CreatePins()
-    {
+    private void CreatePins() {
 
     }
 
-    
 
-    public BlockComponent(/*BaseBlock block*/) {
+    public BlockComponent(BaseBlock block) {
         this.block = block;
+
         MenuItem item = new MenuItem("Input X");
         MenuItem item2 = new MenuItem("Output Y");
         item.setOnAction(new EventHandler<ActionEvent>() {
@@ -65,11 +62,12 @@ public class BlockComponent extends Label {
 
         name = "Test " + String.valueOf(counter++);
         contextMenu.getItems().addAll(item, item2);
-        setTooltip(new Tooltip("Tooltip Test"));
+        setTooltip(new Tooltip("ToolTip what?"));
+
         SetTooltipText();
+
         setText("Hey");
         me = this;
-//		this.block = block;
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
