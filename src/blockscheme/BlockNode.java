@@ -28,16 +28,16 @@ public class BlockNode
 	
 		public void Compute() throws Exception
 		{
-			for (int i = 0; i < SubNodes.size(); i++)
-			{
-				SubNodes.get(i).Compute();
-			}
-
-			for (int i = 0; i < kids.size(); i++)
-			{
-				this.value.getInput().set(this.connectionString.get(i).substring(1, 2),
-					kids.get(i).getOutput().get(this.connectionString.get(i).substring(0, 1)));
-			}
-			this.value.calculate();
+//			for (int i = 0; i < SubNodes.size(); i++)
+//			{
+//				SubNodes.get(i).Compute();
+//			}
+//
+//			for (int i = 0; i < kids.size(); i++)
+//			{
+//				this.value.getInput().set(this.connectionString.get(i).substring(1, 2),
+//					kids.get(i).getOutput().get(this.connectionString.get(i).substring(0, 1)));
+//			}
+//			this.value.calculate();
 		}		
 }

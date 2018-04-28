@@ -16,8 +16,7 @@ public class BlockSchemeGui {
         current = new Cable();
     }
 
-    public static void ListAll()
-    {
+    public static void ListAll() {
         for (BlockConnectionBuilder bcb :
                 BCBList) {
             System.out.println(bcb.getUiStart().name + " " + bcb.getUiEnd().name);
@@ -25,9 +24,15 @@ public class BlockSchemeGui {
     }
 
 
-    public static void AddBCB(BlockConnectionBuilder BCB)
-    {
+    public static void AddBCB(BlockConnectionBuilder BCB) {
         BCBList.add(BCB);
     }
 
+    /**
+     * Find Start and End point
+     */
+    public static void FindEnds()
+    {
+
+    }
 }

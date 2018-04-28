@@ -1,50 +1,17 @@
 package blockscheme;
-import blockscheme.Port;
-import blockscheme.BaseBlockInterface;
+import blockscheme.ports.Port;
 
 import java.util.ArrayList;
 
 public class BaseBlock implements BaseBlockInterface
 {
-	protected Port input = new Port();
-	protected Port output = new Port();
+	protected ArrayList<Port> input;
+	protected ArrayList<Port> output;
 	protected String name = "none";
-	@Override
-	public void setInput(Port port)
-	{
-		this.input = port;
-	}
 
 	@Override
-	public Port getInput()
-	{
-		return this.input;
-	}	
-
-	@Override
-	public Port getOutput()
-	{
-		return this.output;
-	}
-
-	@Override
-	public int outputSize()
-	{
-		return this.output.PortSize();
-	}
-
-	@Override
-	public int inputSize()
-	{
-		return this.input.PortSize();
-	}
-
-	@Override
-	public void createPorts()
-	{	
-		this.input.add("A");
-		this.input.add("B");
-		this.output.add("Y");
+	public String TextOutput() {
+		return null;
 	}
 
 	/**

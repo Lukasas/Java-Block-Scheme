@@ -1,13 +1,11 @@
 package blockscheme;
-import blockscheme.BaseBlock;
-import blockscheme.Port;
 
-import java.util.ArrayList;
 public class BlockDiv extends BaseBlock
 {
-	public BlockDiv()
+	/*public BlockDiv()
 	{
 		super.createPorts();
+
 	}
 
 	public BlockDiv(double val1, double val2)
@@ -24,6 +22,6 @@ public class BlockDiv extends BaseBlock
 			throw new Exception("Dividing by zero!!");	
 
 		this.output.set("Y", this.input.get("A") / this.input.get("B"));
-	}
+	}*/
 }
 	
