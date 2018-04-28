@@ -23,6 +23,11 @@ public class BlockComponent extends Label {
     private static int counter = 0;
     private static boolean connecting = false;
 
+    public BlockComponent input;
+    public BlockComponent output;
+
+
+
     public String name;
 
     private static BlockConnectionBuilder BCB;
@@ -32,7 +37,15 @@ public class BlockComponent extends Label {
         getTooltip().setText("Input X: 5\nOutput Y: -5");
     }
 
-    public BlockComponent() {
+    private void CreatePins()
+    {
+
+    }
+
+    
+
+    public BlockComponent(/*BaseBlock block*/) {
+        this.block = block;
         MenuItem item = new MenuItem("Input X");
         MenuItem item2 = new MenuItem("Output Y");
         item.setOnAction(new EventHandler<ActionEvent>() {

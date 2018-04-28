@@ -1,43 +1,13 @@
 package blockscheme;
-import blockscheme.Port;
-import java.util.ArrayList;
+import blockscheme.ports.Port;
+
 public interface BaseBlockInterface
 {
-	/**
-	* This method sets input port.
-	* @return Nothing.
-	*/
-	public void setInput(Port port);
-
-	/**
-	* This method creates input and output port.
-	* @return Nothing.
-	*/
-	public void createPorts();
-
-	/**
-	* This method returns output port.
-	* @return Port
-	*/
-	public Port getOutput();
-
-	/**
-	* This method returns input port.
-	* @return Port
-	*/
-	public Port getInput();
-
-	/**
-	* This method returns size of output. (Type)
-	* @return Int size of output
-	*/
-	public int outputSize();
-
-	/**
-	* This method returns size of input. (Type)
-	* @return Int size of input
-	*/
-	public int inputSize();
+    /**
+     * Creates text output for each block.
+     * @return Text output for calculation.
+     */
+    public String TextOutput();
 
 	/**
 	* This method calculates outputs value accordingly to the inputs.

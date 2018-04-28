@@ -1,11 +1,8 @@
 package blockscheme;
-import blockscheme.BaseBlock;
-import blockscheme.Port;
 
-import java.util.ArrayList;
 public class BlockSub extends BaseBlock
 {
-	public BlockSub()
+	/*public BlockSub()
 	{
 		super.createPorts();
 	}
@@ -21,5 +18,5 @@ public class BlockSub extends BaseBlock
 	public void calculate() throws Exception
 	{		
 		this.output.set("Y", this.input.get("A") - this.input.get("B"));
-	}
+	}*/
 }
