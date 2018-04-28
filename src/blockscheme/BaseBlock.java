@@ -32,6 +32,7 @@ public class BaseBlock implements BaseBlockInterface
             throw new RuntimeException("Setting input index out of range.");
 
         input.get(index).CopyData(p);
+        TextOutput();
     }
 
     public void SetOutput(int index, Port p) {
@@ -39,6 +40,7 @@ public class BaseBlock implements BaseBlockInterface
             throw new RuntimeException("Setting output index out of range.");
 
         output.get(index).CopyData(p);
+        TextOutput();
     }
 
     @Override
@@ -76,9 +78,11 @@ public class BaseBlock implements BaseBlockInterface
     /**
 	* This method calculates outputs value accordingly to the inputs.
 	* It contains the calculation formula.
+    * In every child class the super.calculate() must be called at the very end of the calculate function.
+    * It's important for values propagation into output.
 	* @return Nothing
 	*/
 	@Override
-	public void calculate() throws Exception
-	{}
+	public void calculate()
+	{TextOutput();}
 }

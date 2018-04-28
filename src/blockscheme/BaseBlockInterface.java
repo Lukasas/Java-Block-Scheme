@@ -50,5 +50,5 @@ public interface BaseBlockInterface
 	* Can throw exceptions according to blocks calculations.
 	* @return Nothing
 	*/
-	void calculate() throws Exception;
+	void calculate();
 }

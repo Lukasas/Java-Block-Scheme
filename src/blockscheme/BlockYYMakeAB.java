@@ -37,9 +37,11 @@ public class BlockYYMakeAB extends BaseBlock {
 
 
     @Override
-    public void calculate() throws Exception {
-        super.calculate();
+    public void calculate() {
+
         ab.setA(y0.getY());
         ab.setB(y1.getY());
+
+        super.calculate(); // THIS MUST BE CALLED AT THE VERY END OF CALCULATE TO PROPAGATE VALUES INTO OUTPUT !!
     }
 }

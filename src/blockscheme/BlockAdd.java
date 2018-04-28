@@ -26,14 +26,13 @@ public class BlockAdd extends BaseBlock {
 
     @Override
     public String TextOutput() {
-	    BlockTextOutput.set("Add");
-        return "Add";
+        BlockTextOutput.set(String.format("Inputs:\n\tAB: (%f, %f)\nOutputs:\n\tY(0): %f", ab.getA(), ab.getB(), y.getY()));
+        return BlockTextOutput.get();
     }
 
     @Override
-	public void calculate() throws Exception {
-		super.calculate();
+	public void calculate() {
 		y.setY(ab.getA() + ab.getB());
-        TextOutput();
+        super.calculate();
 	}
 }

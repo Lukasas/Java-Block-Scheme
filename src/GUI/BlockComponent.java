@@ -1,6 +1,5 @@
 package GUI;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -16,15 +15,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.control.ContextMenu;
 
 public class BlockComponent extends Label {
+    private BlockComponent me;
     private BaseBlock block;
     private final double[] dragDelta = new double[2];
-    private BlockComponent me;
-    private final ContextMenu contextMenu = new ContextMenu();
-    private static int counter = 0;
+    private final ContextMenu contextMenuInputs = new ContextMenu();
+    private final ContextMenu contextMenuOutputs = new ContextMenu();
+
     private static boolean connecting = false;
 
-    public BlockComponent input;
-    public BlockComponent output;
 
 
     public String name;
@@ -32,18 +30,29 @@ public class BlockComponent extends Label {
     private static BlockConnectionBuilder BCB;
 
     private void SetTooltipText() {
+        if (getTooltip() == null)
+            setTooltip(new Tooltip());
         getTooltip().textProperty().bind(block.blockTextOutputProperty());
     }
 
     private void CreatePins() {
-
+        for (int i = 0; i < block.GetInputNames().size(); i++) {
+            MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetInputNames().get(i)));
+            contextMenuInputs.getItems().add(item);
+        }
+        for (int i = 0; i < block.GetOutputNames().size(); i++) {
+            MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetOutputNames().get(i)));
+            contextMenuOutputs.getItems().add(item);
+        }
     }
 
 
     public BlockComponent(BaseBlock block) {
+        me = this;
         this.block = block;
-
-        MenuItem item = new MenuItem("Input X");
+        CreatePins();
+        SetTooltipText();
+        /*MenuItem item = new MenuItem("Input X");
         MenuItem item2 = new MenuItem("Output Y");
         item.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -58,16 +67,13 @@ public class BlockComponent extends Label {
                     BCB.setUiStart(me);
                 }
             }
-        });
+        });*/
 
-        name = "Test " + String.valueOf(counter++);
-        contextMenu.getItems().addAll(item, item2);
-        setTooltip(new Tooltip("ToolTip what?"));
 
-        SetTooltipText();
 
         setText("Hey");
-        me = this;
+
+
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -79,7 +85,8 @@ public class BlockComponent extends Label {
                         break;
                     case SECONDARY: {
                         if (!connecting) {
-                            contextMenu.show(me, event.getScreenX(), event.getScreenY());
+                            contextMenuInputs.show(me, event.getScreenX(), event.getScreenY());
+                            contextMenuOutputs.show(me, event.getScreenX(), event.getScreenY());
                         }
                     }
                     break;
@@ -87,12 +94,12 @@ public class BlockComponent extends Label {
             }
         });
 
+        // Moving with the component in scene.
         setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY: {
-
                         me.setLayoutX(event.getSceneX() + dragDelta[0]);
                         me.setLayoutY(event.getSceneY() + dragDelta[1]);
                         if (((Pane) me.getParent()).getWidth() < (me.getLayoutX() + me.getWidth())) {
@@ -116,6 +123,7 @@ public class BlockComponent extends Label {
             }
         });
 
+
         setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -134,7 +142,6 @@ public class BlockComponent extends Label {
                 }
             }
         });
-
 
     }
 }
