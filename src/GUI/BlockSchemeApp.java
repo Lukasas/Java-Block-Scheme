@@ -47,22 +47,19 @@ public class BlockSchemeApp extends Application {
         blockControls.getChildren().addAll(buttonBlockAdd, buttonProjected);
     }
 
-    private void CreateBlockDebug()
-    {
+    private void CreateBlockDebug() {
         debugControls = new VBox();
         debugControls.setPadding(new Insets(15, 12, 15, 12));
         debugControls.setSpacing(10);
         debugControls.setStyle("-fx-background-color: #336699;");
         Button buttonRun = new Button("Run");
         buttonRun.setPrefSize(100, 20);
-//        buttonBlockAdd.setOnMouseClicked(new EventHandler<MouseEvent>() {
-//            @Override
-//            public void handle(MouseEvent event) {
-//                BlockComponent buttonBlockAddw = new BlockComponent();
-//                buttonBlockAdd.setPrefSize(100, 20);
-//                canvas.getChildren().add(buttonBlockAddw);
-//            }
-//        });
+        buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockSchemeGui.ListAll();
+            }
+        });
 
         Button buttonStep = new Button("Step");
         buttonStep.setPrefSize(100, 20);
