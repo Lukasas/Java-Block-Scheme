@@ -10,7 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import javafx.scene.control.ContextMenu;
 
@@ -24,6 +24,8 @@ public class BlockComponent extends Label {
     private static boolean connecting = false;
 
     public String name;
+
+    private boolean active = false;
 
     private static BlockConnectionBuilder BCB;
 
@@ -48,6 +50,7 @@ public class BlockComponent extends Label {
                     connecting = false; // This will cause problems later when user click an actual action, there is no skip.
                     BCB.setUiEnd(me, block.GetInput(GetIndexFromMenuItem(event.getSource())));
                     BlockSchemeGui.AddBCB(BCB);
+                    ((Pane) getParent()).getChildren().add(BCB);
                     event.consume();
                 }
             });
@@ -61,7 +64,6 @@ public class BlockComponent extends Label {
                     connecting = true;
                     BCB = new BlockConnectionBuilder();
                     BCB.setUiStart(me, block.GetOutput(GetIndexFromMenuItem(event.getSource())));
-                    ((Pane) getParent()).getChildren().add(BCB);
                     event.consume();
                 }
             });
@@ -95,8 +97,7 @@ public class BlockComponent extends Label {
 
 
         setText(block.GetName());
-
-
+        Active(false);
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -160,5 +161,20 @@ public class BlockComponent extends Label {
             }
         });
 
+    }
+
+    public void RefreshMe()
+    {
+        block.TextOutput();
+    }
+
+    public void Active(boolean active)
+    {
+        if (active)
+            setStyle("-fx-background-color: #ffCCCA; -fx-padding: 10 10 10 10");
+        else
+            setStyle("-fx-background-color: #ffffff; -fx-padding: 10 10 10 10");
+
+        this.active = active;
     }
 }

@@ -102,16 +102,5 @@ public class BlockSchemeApp extends Application {
 
         stage.setScene(scene);
         stage.show();
-//        Line redLine = LineBuilder.create()
-//                .startX(296)
-//                .startY(128)
-//                .endX(401)
-//                .endY(233)
-//                .fill(Color.RED)
-//                .stroke(Color.RED)
-//                .strokeWidth(10.0f)
-//                .build();
-//
-//        canvas.getChildren().add(redLine);
     }
 }

@@ -46,7 +46,8 @@ public class BlockConnectionBuilder extends Line {
     public void Propagate()
     {
         connection.Propagate();
-
+        uiStart.RefreshMe();
+        uiEnd.RefreshMe();
     }
 
 }
