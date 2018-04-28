@@ -22,6 +22,7 @@ public class BlockAdd extends BaseBlock {
 		y = new YPort();
 		input.add(ab);
 		output.add(y);
+        name = "BlockAdd";
 	}
 
     @Override

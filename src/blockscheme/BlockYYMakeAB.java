@@ -25,6 +25,8 @@ public class BlockYYMakeAB extends BaseBlock {
         input.add(y0);
         input.add(y1);
         output.add(ab);
+
+        name = "BlockYYMakeAB";
     }
 
 

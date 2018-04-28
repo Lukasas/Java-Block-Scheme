@@ -51,4 +51,11 @@ public interface BaseBlockInterface
 	* @return Nothing
 	*/
 	void calculate();
+
+    /**
+     * Method for recieving block name.
+     * @return Block name.
+     */
+	String GetName();
+
 }

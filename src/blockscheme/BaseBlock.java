@@ -85,4 +85,9 @@ public class BaseBlock implements BaseBlockInterface
 	@Override
 	public void calculate()
 	{TextOutput();}
+
+    @Override
+    public String GetName() {
+        return name;
+    }
 }

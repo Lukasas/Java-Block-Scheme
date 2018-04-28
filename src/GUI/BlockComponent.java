@@ -23,8 +23,6 @@ public class BlockComponent extends Label {
 
     private static boolean connecting = false;
 
-
-
     public String name;
 
     private static BlockConnectionBuilder BCB;
@@ -38,10 +36,22 @@ public class BlockComponent extends Label {
     private void CreatePins() {
         for (int i = 0; i < block.GetInputNames().size(); i++) {
             MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetInputNames().get(i)));
+            item.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    connecting = true;
+                }
+            });
             contextMenuInputs.getItems().add(item);
         }
         for (int i = 0; i < block.GetOutputNames().size(); i++) {
             MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetOutputNames().get(i)));
+            item.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    connecting = false;
+                }
+            });
             contextMenuOutputs.getItems().add(item);
         }
     }
@@ -71,7 +81,7 @@ public class BlockComponent extends Label {
 
 
 
-        setText("Hey");
+        setText(block.GetName());
 
 
         setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -84,10 +94,11 @@ public class BlockComponent extends Label {
                         me.setCursor(Cursor.MOVE);
                         break;
                     case SECONDARY: {
-                        if (!connecting) {
+                        if (!connecting)
                             contextMenuInputs.show(me, event.getScreenX(), event.getScreenY());
+                        else
                             contextMenuOutputs.show(me, event.getScreenX(), event.getScreenY());
-                        }
+
                     }
                     break;
                 }
@@ -132,12 +143,12 @@ public class BlockComponent extends Label {
                         me.setCursor(Cursor.DEFAULT);
                         break;
                     case SECONDARY:
-                        if (connecting) {
-                            connecting = false;
-                            BCB.setUiEnd(me);
-                            BlockSchemeGui.AddBCB(BCB);
-                            BCB = null;
-                        }
+//                        if (connecting) {
+//                            connecting = false;
+//                            BCB.setUiEnd(me);
+//                            BlockSchemeGui.AddBCB(BCB);
+//                            BCB = null;
+//                        }
                         break;
                 }
             }
