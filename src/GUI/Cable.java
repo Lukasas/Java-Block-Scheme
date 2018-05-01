@@ -59,4 +59,19 @@ public class Cable {
         pEnd = end;
         RefreshText();
     }
+
+    public boolean IsStart(Port port)
+    {
+        return pStart.equals(port);
+    }
+
+    public boolean IsEnd(Port port)
+    {
+        return pEnd.equals(port);
+    }
+
+    public boolean CanEnd(Port port)
+    {
+        return pStart.getName() == port.getName();
+    }
 }

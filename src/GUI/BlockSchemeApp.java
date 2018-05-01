@@ -33,18 +33,22 @@ public class BlockSchemeApp extends Application {
         add(BlockAdd.class);
         add(BlockYYMakeAB.class);
         add(BlockSub.class);
+        add(BlockMul.class);
+        add(BlockDiv.class);
     }};
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Creates HBox that is filled with buttons for creating block. Also links these blocks with buttons components.
+     */
     private void CreateBlockSection() {
         blockControls = new HBox();
         blockControls.setPadding(new Insets(15, 12, 15, 12));
         blockControls.setSpacing(10);
         blockControls.setStyle("-fx-background-color: #336699;");
-
 
         try {
             for (Class<?> cName :
@@ -53,7 +57,8 @@ public class BlockSchemeApp extends Application {
                 Class<?> clazz = Class.forName(cName.getName());
                 Constructor<?> ctor = clazz.getConstructor();
                 Button buttonMaker = new Button(cName.getSimpleName());
-                buttonMaker.setPrefSize(100, 20);
+//                buttonMaker.setPrefSize(100, 20);
+                buttonMaker.setPadding(new Insets(5, 12, 5, 12));
                 buttonMaker.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
@@ -80,6 +85,9 @@ public class BlockSchemeApp extends Application {
 
     }
 
+    /**
+     * Creates Debug menu with Start, Step and Reset
+     */
     private void CreateBlockDebug() {
         debugControls = new VBox();
         debugControls.setPadding(new Insets(15, 12, 15, 12));
@@ -90,7 +98,8 @@ public class BlockSchemeApp extends Application {
         buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockSchemeGui.FeedStarts();
+                BlockSchemeGui.ResetCalculation();
+                BlockSchemeGui.FeedPins();
             }
         });
 
@@ -115,6 +124,10 @@ public class BlockSchemeApp extends Application {
         debugControls.getChildren().addAll(buttonRun, buttonStep, buttonReset);
     }
 
+    /**
+     * Creates whole GUI.
+     * @param stage Stage from main
+     */
     @Override
     public void start(Stage stage) {
         Group root = new Group();

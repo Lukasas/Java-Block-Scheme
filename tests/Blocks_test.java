@@ -9,7 +9,6 @@ import blockscheme.BlockAdd;
 import blockscheme.BlockSub;
 import blockscheme.BlockMul;
 import blockscheme.BlockDiv;
-import blockscheme.BlockNode;
 
 public class Blocks_test
 {
@@ -75,8 +74,6 @@ public class Blocks_test
 		BlockAdd ba = new BlockAdd(2.0, 3.0);
 		BlockMul bm = new BlockMul();
 		bm.getInput().set("B", 2.0);
-		BlockNode head = new BlockNode(bm);
-		BlockNode ban = new BlockNode(ba);
 		head.AddSubNode(ban);
 		head.Connect("Y", "A", ba);
 		head.Compute();

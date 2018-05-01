@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import blockscheme.BlockAdd;
 import blockscheme.BlockSub;
-import blockscheme.BlockNode;
 
 public class BlockConnection_test
 {
@@ -16,8 +15,6 @@ public class BlockConnection_test
 //		BlockAdd blockA = new BlockAdd(4.2, 2.4);
 //		BlockSub blockB = new BlockSub();
 //
-//		BlockNode head = new BlockNode(blockB);
-//		BlockNode kid = new BlockNode(blockA);
 //
 //		blockA.calculate();
 //		blockB.getInput().set("B", 0.6);

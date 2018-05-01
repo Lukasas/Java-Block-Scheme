@@ -1,27 +1,39 @@
 package blockscheme;
 
-public class BlockDiv extends BaseBlock
-{
-	/*public BlockDiv()
-	{
-		super.createPorts();
 
-	}
+/*
+	A ----
+	       \
+	         ---- Y
+		   /
+	B ----
 
-	public BlockDiv(double val1, double val2)
-	{
-		super.createPorts();
-		this.input.set("A", val1);
-		this.input.set("B", val2);
-	}
+ */
 
-	@Override
-	public void calculate() throws Exception
-	{		
-		if (this.input.get("B") == 0.0)
-			throw new Exception("Dividing by zero!!");	
+import blockscheme.ports.ABPort;
+import blockscheme.ports.YPort;
 
-		this.output.set("Y", this.input.get("A") / this.input.get("B"));
-	}*/
+
+public class BlockDiv extends BaseBlock {
+    ABPort ab;
+    YPort y;
+    public BlockDiv() {
+        ab = new ABPort();
+        y = new YPort();
+        input.add(ab);
+        output.add(y);
+        name = "BlockDiv";
+    }
+
+    @Override
+    public String TextOutput() {
+        BlockTextOutput.set(String.format("Inputs:\n\tAB: (%f, %f)\nOutputs:\n\tY(0): %f", ab.getA(), ab.getB(), y.getY()));
+        return BlockTextOutput.get();
+    }
+
+    @Override
+    public void calculate() {
+        y.setY(ab.getA() / ab.getB());
+        super.calculate();
+    }
 }
-	

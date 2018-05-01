@@ -1,5 +1,6 @@
 package GUI;
 
+import blockscheme.ports.Port;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -14,6 +15,7 @@ import javafx.scene.layout.*;
 
 import javafx.scene.control.ContextMenu;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -34,17 +36,28 @@ public class BlockComponent extends Label {
 
     private static BlockConnectionBuilder BCB;
 
+    /**
+     * Binds Component's tooltip with block info text for MouseOver tooltips.
+     */
     private void SetTooltipText() {
         if (getTooltip() == null)
             setTooltip(new Tooltip());
         getTooltip().textProperty().bind(block.blockTextOutputProperty());
     }
 
+    /**
+     * Converts an MenuItem in format X - Name Into X
+     * @param item MenuItem in specific format
+     * @return X from the menu.
+     */
     private int GetIndexFromMenuItem(Object item) {
         MenuItem i = ((MenuItem) item);
         return Integer.valueOf(i.getText().substring(0, i.getText().indexOf(' ')));
     }
 
+    /**
+     * Creates Port menus for right mouse click.
+     */
     private void CreateGUIPorts() {
         for (int i = 0; i < block.GetInputNames().size(); i++) {
             MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetInputNames().get(i)));
@@ -52,9 +65,14 @@ public class BlockComponent extends Label {
                 @Override
                 public void handle(ActionEvent event) {
                     connecting = false; // This will cause problems later when user click an actual action, there is no skip.
-                    BCB.setUiEnd(me, block.GetInput(GetIndexFromMenuItem(event.getSource())));
-                    BlockSchemeGui.AddBCB(BCB);
-                    ((Pane) getParent()).getChildren().add(BCB);
+                    if (BCB.setUiEnd(me, block.GetInput(GetIndexFromMenuItem(event.getSource())))) {
+                        BlockSchemeGui.AddBCB(BCB);
+                        ((Pane) getParent()).getChildren().add(BCB);
+                    }
+                    else
+                    {
+                        JOptionPane.showMessageDialog(null, "Wrong connection!", "Connection Error", JOptionPane.ERROR_MESSAGE);
+                    }
                     event.consume();
                 }
             });
@@ -86,25 +104,52 @@ public class BlockComponent extends Label {
         contextMenuOutputs.getItems().add(item);
     }
 
+    /**
+     * Returns a Port by it's index in block
+     * @param PinIndex Index of the port
+     * @return Selected port
+     */
+    public Port GetPortByIndex(int PinIndex)
+    {
+        return block.GetInput(PinIndex);
+    }
+
+    /**
+     * Gets all ports from block.
+     * @return List of ports.
+     */
     public ArrayList<String> GetPortNames()
     {
         return block.GetInputNames();
     }
 
+    /**
+     * Sets a pin with chosen value.
+     * @param PortIndex Index of the Port that's pin will be changed
+     * @param PortPin Name of the pin that will be assigned a value
+     * @param value Value for the pin
+     */
     public void SetPin(int PortIndex, String PortPin, double value)
     {
         block.SetInputPortPin(PortIndex, PortPin, value);
     }
 
+    /**
+     * Gets all Pins by Port index
+     * @param PortIndex Index of the Port that's Pins will be returned
+     * @return List of pins
+     */
     public Set<String> GetPins(int PortIndex)
     {
         return block.GetPinInputNames(PortIndex);
     }
 
+    /**
+     * Make a step in calculation. Sets ready values.
+     */
     public void Step()
     {
         this.valueReady = this.valueReadyTemp;
-        this.valueReadyTemp = false;
     }
 
     public BlockComponent(BaseBlock block) {
@@ -183,33 +228,54 @@ public class BlockComponent extends Label {
         });
     }
 
+    /**
+     * Calculates current block.
+     */
     public void CalculateBlock() {
         block.calculate();
         valueReadyTemp = true;
     }
 
+    /**
+     * Resets current block calculation.
+     */
     public void ResetBlock()
     {
         valueReady = false;
         valueReadyTemp = false;
         Active(false);
+        block.ResetPorts();
     }
 
+    /**
+     * Checks if this block is ready / already calculated.
+     * @return True if already did math.
+     */
     public boolean IsReady()
     {
         return valueReady;
     }
 
+    /**
+     * Refreshes Tooltip for this block.
+     */
     public void RefreshMe()
     {
         block.TextOutput();
     }
 
+    /**
+     * Removes this block from scene / scheme.
+     */
     public void RemoveMe()
     {
         ((Pane)getParent()).getChildren().remove(me);
     }
 
+    /**
+     * Sets this block to active means coloring it with proper color.
+     * @param active Index of active 0 - not active, > 0 - active
+     */
     public void Active(int active)
     {
         if (active == 1)
@@ -222,11 +288,18 @@ public class BlockComponent extends Label {
         this.active = (active != 0);
     }
 
+    /**
+     * Paints current block red.
+     */
     public void ErrorStyle()
     {
         setStyle("-fx-background-color: #ffCCCA; -fx-padding: 10 10 10 10");
     }
 
+    /**
+     * Wrapper for Active with number
+     * @param active True - Sets active / False - Sets not active
+     */
     public void Active(boolean active)
     {
         Active(active ? 1 : 0);

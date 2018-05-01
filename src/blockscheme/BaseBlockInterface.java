@@ -65,4 +65,16 @@ public interface BaseBlockInterface
      */
 	String GetName();
 
+    /**
+     * Sets value of selected Point and selected Pin
+     * @param PortIndex Port it's Pin is going to be changed
+     * @param Pin Pin it's value is going to be changed
+     * @param value Value for the pin.
+     */
+    void SetInputPortPin(int PortIndex, String Pin, double value);
+
+    /**
+     * Resets all ports to 0.0
+     */
+    void ResetPorts();
 }

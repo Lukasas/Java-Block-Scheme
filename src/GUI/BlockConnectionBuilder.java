@@ -32,10 +32,18 @@ public class BlockConnectionBuilder extends Line {
         });
     }
 
+    /**
+     * Removes this connection from the scene.
+     */
     public void RemoveMe() {
         ((Pane) getParent()).getChildren().remove(this);
     }
 
+    /**
+     * Sets start of this connection and bind it's start to a block.
+     * @param component Block that will be defined as start
+     * @param output Block's port that will be bind.
+     */
     public void setUiStart(BlockComponent component, Port output) {
         uiStart = component;
         connection.setStart(output);
@@ -44,21 +52,60 @@ public class BlockConnectionBuilder extends Line {
 
     }
 
-    public void setUiEnd(BlockComponent component, Port input) {
+    /**
+     * Sets end of this connection and bind it's start to a block.
+     * @param component Block that will be defined as end
+     * @param input Block's port that will be bind.
+     */
+    public boolean setUiEnd(BlockComponent component, Port input) {
+        if (!connection.CanEnd(input))
+            return false;
         uiEnd = component;
         connection.setEnd(input);
         endXProperty().bind(component.layoutXProperty());
         endYProperty().bind(component.layoutYProperty());
+        return true;
     }
 
+    /**
+     * Returns start block from GUI
+     * @return Start block
+     */
     public BlockComponent getUiStart() {
         return uiStart;
     }
 
+    /**
+     * Returns end block from GUI
+     * @return End block
+     */
     public BlockComponent getUiEnd() {
         return uiEnd;
     }
 
+    /**
+     * Check if Port is connected in Start
+     * @param port Port to be checked
+     * @return True is port is connected. False otherwise
+     */
+    public boolean IsPinInStartConnected(Port port)
+    {
+        return connection.IsEnd(port);
+    }
+
+    /**
+     * Check if Port is connected in End
+     * @param port Port to be checked
+     * @return True is port is connected. False otherwise
+     */
+    public boolean IsPinInEndConnected(Port port)
+    {
+        return connection.IsStart(port);
+    }
+
+    /**
+     * Calculates value and propagate values from start to the end
+     */
     public void Propagate() {
         connection.Propagate();
         uiStart.RefreshMe();
