@@ -114,8 +114,8 @@ public class BlockSchemeGui {
             if (bcb.getUiEnd().equals(block))
                 if (!bcb.getUiStart().IsReady())
                     return false;
-//                else
-//                    bcb.getUiStart().Active(1);
+                else
+                    bcb.getUiStart().Active(true);
         }
         return true;
     }
@@ -166,7 +166,7 @@ public class BlockSchemeGui {
             if (AreInputsReady(block)) {
                 block.CalculateBlock();
                 PropagateBlock(block);
-                block.Active(true);
+                block.Active(2);
             }
 
         }
