@@ -71,6 +71,12 @@ public class BlockSchemeApp extends Application {
 
         Button buttonStep = new Button("Step");
         buttonStep.setPrefSize(100, 20);
+        buttonStep.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockSchemeGui.FindEnds();
+            }
+        });
 
         Button buttonReset = new Button("Reset");
         buttonReset.setPrefSize(100, 20);

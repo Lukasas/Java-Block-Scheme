@@ -69,12 +69,24 @@ public class BlockComponent extends Label {
             });
             contextMenuOutputs.getItems().add(item);
         }
+
+        // Remove Button for Blocks
+        MenuItem item = new MenuItem("Remove");
+        item.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                BlockSchemeGui.RemoveBlock(me);
+            }
+        });
+
+        contextMenuOutputs.getItems().add(item);
     }
 
 
     public BlockComponent(BaseBlock block) {
         me = this;
         this.block = block;
+        BlockSchemeGui.AddBlock(this);
         CreatePins();
         SetTooltipText();
         /*MenuItem item = new MenuItem("Input X");
@@ -97,6 +109,7 @@ public class BlockComponent extends Label {
 
 
         setText(block.GetName());
+        name = block.GetName();
         Active(false);
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -166,6 +179,11 @@ public class BlockComponent extends Label {
     public void RefreshMe()
     {
         block.TextOutput();
+    }
+
+    public void RemoveMe()
+    {
+        ((Pane)getParent()).getChildren().remove(me);
     }
 
     public void Active(boolean active)
