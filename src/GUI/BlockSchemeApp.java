@@ -65,7 +65,7 @@ public class BlockSchemeApp extends Application {
         buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockSchemeGui.Propagate();
+                BlockSchemeGui.ResetCalculation();
             }
         });
 
@@ -74,12 +74,19 @@ public class BlockSchemeApp extends Application {
         buttonStep.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
+                BlockSchemeGui.MakeCalculationPath();
+            }
+        });
+
+        Button buttonReset = new Button("Reset (Find Ends)");
+        buttonReset.setPrefSize(100, 20);
+        buttonReset.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
                 BlockSchemeGui.FindEnds();
             }
         });
 
-        Button buttonReset = new Button("Reset");
-        buttonReset.setPrefSize(100, 20);
         debugControls.getChildren().addAll(buttonRun, buttonStep, buttonReset);
     }
 

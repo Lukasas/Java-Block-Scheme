@@ -24,6 +24,8 @@ public class BlockComponent extends Label {
     private static boolean connecting = false;
 
     public String name;
+    private boolean valueReady = false;
+    private boolean valueReadyTemp = false;
 
     private boolean active = false;
 
@@ -35,9 +37,8 @@ public class BlockComponent extends Label {
         getTooltip().textProperty().bind(block.blockTextOutputProperty());
     }
 
-    private int GetIndexFromMenuItem(Object item)
-    {
-        MenuItem i = ((MenuItem)item);
+    private int GetIndexFromMenuItem(Object item) {
+        MenuItem i = ((MenuItem) item);
         return Integer.valueOf(i.getText().substring(0, i.getText().indexOf(' ')));
     }
 
@@ -82,6 +83,11 @@ public class BlockComponent extends Label {
         contextMenuOutputs.getItems().add(item);
     }
 
+    public void Step()
+    {
+        this.valueReady = this.valueReadyTemp;
+        this.valueReadyTemp = false;
+    }
 
     public BlockComponent(BaseBlock block) {
         me = this;
@@ -105,7 +111,6 @@ public class BlockComponent extends Label {
                 }
             }
         });*/
-
 
 
         setText(block.GetName());
@@ -169,11 +174,28 @@ public class BlockComponent extends Label {
                 switch (event.getButton()) {
                     case PRIMARY:
                         me.setCursor(Cursor.DEFAULT);
+                        BlockSchemeGui.GetBlockInputConnectors(me);
+                        BlockSchemeGui.GetBlockOutputConnectors(me);
                         break;
                 }
             }
         });
 
+    }
+
+    public void CalculateBlock() {
+        block.calculate();
+        valueReady = true;
+    }
+
+    public void ResetBlock()
+    {
+        valueReady = false;
+    }
+
+    public boolean IsReady()
+    {
+        return valueReady;
     }
 
     public void RefreshMe()
@@ -194,5 +216,6 @@ public class BlockComponent extends Label {
             setStyle("-fx-background-color: #ffffff; -fx-padding: 10 10 10 10");
 
         this.active = active;
+        this.valueReadyTemp = active;
     }
 }
