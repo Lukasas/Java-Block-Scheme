@@ -25,6 +25,7 @@ public class Cable {
 
     /**
      * This method serves for reversing the flow of data.
+     * According to implementation of connecting two blocks, this should never be used.
      */
     public void Reverse()
     {
