@@ -14,6 +14,9 @@ import javafx.scene.layout.*;
 
 import javafx.scene.control.ContextMenu;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 public class BlockComponent extends Label {
     private BlockComponent me;
     private BaseBlock block;
@@ -42,7 +45,7 @@ public class BlockComponent extends Label {
         return Integer.valueOf(i.getText().substring(0, i.getText().indexOf(' ')));
     }
 
-    private void CreatePins() {
+    private void CreateGUIPorts() {
         for (int i = 0; i < block.GetInputNames().size(); i++) {
             MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetInputNames().get(i)));
             item.setOnAction(new EventHandler<ActionEvent>() {
@@ -83,6 +86,21 @@ public class BlockComponent extends Label {
         contextMenuOutputs.getItems().add(item);
     }
 
+    public ArrayList<String> GetPortNames()
+    {
+        return block.GetInputNames();
+    }
+
+    public void SetPin(int PortIndex, String PortPin, double value)
+    {
+        block.SetInputPortPin(PortIndex, PortPin, value);
+    }
+
+    public Set<String> GetPins(int PortIndex)
+    {
+        return block.GetPinInputNames(PortIndex);
+    }
+
     public void Step()
     {
         this.valueReady = this.valueReadyTemp;
@@ -93,7 +111,7 @@ public class BlockComponent extends Label {
         me = this;
         this.block = block;
         BlockSchemeGui.AddBlock(this);
-        CreatePins();
+        CreateGUIPorts();
         SetTooltipText();
 
         setText(block.GetName());
@@ -192,13 +210,25 @@ public class BlockComponent extends Label {
         ((Pane)getParent()).getChildren().remove(me);
     }
 
-    public void Active(boolean active)
+    public void Active(int active)
     {
-        if (active)
-            setStyle("-fx-background-color: #ffCCCA; -fx-padding: 10 10 10 10");
+        if (active == 1)
+            setStyle("-fx-background-color: #b5bbFF; -fx-padding: 10 10 10 10");
+        else if(active == 2)
+            setStyle("-fx-background-color: #CCFFCA; -fx-padding: 10 10 10 10");
         else
             setStyle("-fx-background-color: #ffffff; -fx-padding: 10 10 10 10");
 
-        this.active = active;
+        this.active = (active != 0);
+    }
+
+    public void ErrorStyle()
+    {
+        setStyle("-fx-background-color: #ffCCCA; -fx-padding: 10 10 10 10");
+    }
+
+    public void Active(boolean active)
+    {
+        Active(active ? 1 : 0);
     }
 }

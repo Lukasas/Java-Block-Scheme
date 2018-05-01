@@ -1,7 +1,6 @@
 package GUI;
 
-import blockscheme.BlockAdd;
-import blockscheme.BlockYYMakeAB;
+import blockscheme.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -14,15 +13,27 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.LineBuilder;
-import javafx.scene.paint.Color;
+
+import java.lang.reflect.*;
+import java.util.ArrayList;
 
 public class BlockSchemeApp extends Application {
     private HBox blockControls;
     private VBox debugControls;
     private Pane canvas;
 
+
+    /// Creating New block in few easy steps:
+    /// 1. Create new file in blockscheme with block name like BlockMul
+    /// 2. Copy an existing block like BlockAdd
+    /// 3. Change Ports and Calculation
+    /// 4. Add block name in ArrayList below.
+    /// Ready2Go
+    static ArrayList<Class<?>> AllBlocksType = new ArrayList<Class<?>>() {{
+        add(BlockAdd.class);
+        add(BlockYYMakeAB.class);
+        add(BlockSub.class);
+    }};
 
     public static void main(String[] args) {
         launch(args);
@@ -33,26 +44,40 @@ public class BlockSchemeApp extends Application {
         blockControls.setPadding(new Insets(15, 12, 15, 12));
         blockControls.setSpacing(10);
         blockControls.setStyle("-fx-background-color: #336699;");
-        Button buttonBlockAdd = new Button("BlockAdd");
-        buttonBlockAdd.setPrefSize(100, 20);
-        buttonBlockAdd.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                BlockComponent buttonBlockAddw = new BlockComponent(new BlockAdd());
-                canvas.getChildren().add(buttonBlockAddw);
-            }
-        });
 
-        Button buttonBlockYYAB = new Button("BlockYYMakeAB");
-        buttonBlockYYAB.setPrefSize(100, 20);
-        buttonBlockYYAB.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                BlockComponent buttonBlockYYAB = new BlockComponent(new BlockYYMakeAB());
-                canvas.getChildren().add(buttonBlockYYAB);
+
+        try {
+            for (Class<?> cName :
+                    AllBlocksType) {
+
+                Class<?> clazz = Class.forName(cName.getName());
+                Constructor<?> ctor = clazz.getConstructor();
+                Button buttonMaker = new Button(cName.getSimpleName());
+                buttonMaker.setPrefSize(100, 20);
+                buttonMaker.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        try {
+                            Object obj = ctor.newInstance(new Object[]{});
+                            BaseBlock bb = (BaseBlock) obj;
+                            BlockComponent buttonBlock = new BlockComponent(bb);
+                            canvas.getChildren().add(buttonBlock);
+
+                        } catch (Exception ex) {
+                            System.out.printf("I broke it... " + ex.getMessage());
+                            throw new RuntimeException("Exception when creating block!!");
+                        }
+
+
+                    }
+                });
+                blockControls.getChildren().add(buttonMaker);
             }
-        });
-        blockControls.getChildren().addAll(buttonBlockAdd, buttonBlockYYAB);
+        } catch (Exception ex) {
+            System.out.printf("I broke it... " + ex.getMessage());
+            throw new RuntimeException("Exception when creating button!!");
+        }
+
     }
 
     private void CreateBlockDebug() {
@@ -60,12 +85,12 @@ public class BlockSchemeApp extends Application {
         debugControls.setPadding(new Insets(15, 12, 15, 12));
         debugControls.setSpacing(10);
         debugControls.setStyle("-fx-background-color: #336699;");
-        Button buttonRun = new Button("Run");
+        Button buttonRun = new Button("Start");
         buttonRun.setPrefSize(100, 20);
         buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockSchemeGui.ResetCalculation();
+                BlockSchemeGui.FeedStarts();
             }
         });
 
@@ -78,12 +103,12 @@ public class BlockSchemeApp extends Application {
             }
         });
 
-        Button buttonReset = new Button("Reset (Find Ends)");
+        Button buttonReset = new Button("Reset");
         buttonReset.setPrefSize(100, 20);
         buttonReset.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockSchemeGui.FindEnds();
+                BlockSchemeGui.ResetCalculation();
             }
         });
 

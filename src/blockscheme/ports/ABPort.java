@@ -14,9 +14,7 @@ public class ABPort extends Port {
         add("B");
     }
 
-    public double getA() {
-        return get("A");
-    }
+    public double getA() { return get("A"); }
 
     public double getB(){
         return get("B");

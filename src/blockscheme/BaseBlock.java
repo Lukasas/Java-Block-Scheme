@@ -7,27 +7,25 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class BaseBlock implements BaseBlockInterface
-{
-	protected ArrayList<Port> input = new ArrayList<>();
-	protected ArrayList<Port> output = new ArrayList<>();
-	protected String name = "none";
+public class BaseBlock implements BaseBlockInterface {
+    protected ArrayList<Port> input = new ArrayList<>();
+    protected ArrayList<Port> output = new ArrayList<>();
+    String name = "none";
 
-	protected StringProperty BlockTextOutput = new SimpleStringProperty();
-    public StringProperty blockTextOutputProperty()
-    {
+    protected StringProperty BlockTextOutput = new SimpleStringProperty();
+
+    public StringProperty blockTextOutputProperty() {
         TextOutput();
         return BlockTextOutput;
     }
 
 
+    @Override
+    public String TextOutput() {
+        return null;
+    }
 
-	@Override
-	public String TextOutput() {
-	    return null;
-	}
-
-	@Override
+    @Override
     public void SetInput(int index, Port p) {
         if (index >= input.size())
             throw new RuntimeException("Setting input index out of range.");
@@ -42,6 +40,12 @@ public class BaseBlock implements BaseBlockInterface
             throw new RuntimeException("Setting output index out of range.");
 
         output.get(index).CopyData(p);
+        TextOutput();
+    }
+
+    public void SetInputPortPin(int PortIndex, String Pin, double value)
+    {
+        input.get(PortIndex).set(Pin, value);
         TextOutput();
     }
 
@@ -76,6 +80,8 @@ public class BaseBlock implements BaseBlockInterface
     public ArrayList<String> GetOutputNames() {
         return StringerizeArray(output);
     }
+
+    public Set<String> GetPinInputNames(int PortIndex) { return input.get(PortIndex).getKeys(); }
 
     /**
 	* This method calculates outputs value accordingly to the inputs.

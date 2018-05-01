@@ -1,10 +1,21 @@
 package blockscheme.ports;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 public class Port {
     private HashMap<String, Double> data = new HashMap<String, Double>();
     protected String nazev;
+
+    public String PortText()
+    {
+        String temp = "";
+        for (Map.Entry<String, Double> entry :
+                data.entrySet()) {
+            temp += String.format("%s - %f\n", entry.getKey(), entry.getValue());
+        }
+        return temp;
+    }
 
     public Port() {
         createPortData();
@@ -14,11 +25,11 @@ public class Port {
         this.data.put(nazev, 0.0);
     }
 
-    protected void set(String nazev, Double hodnota) {
+    public void set(String nazev, Double hodnota) {
         this.data.put(nazev, hodnota);
     }
 
-    protected Set<String> getKeys() {
+    public Set<String> getKeys() {
         return this.data.keySet();
     }
 
@@ -26,7 +37,7 @@ public class Port {
         this.data.remove(nazev);
     }
 
-    protected Double get(String nazev) {
+    public Double get(String nazev) {
         return this.data.get(nazev);
     }
 

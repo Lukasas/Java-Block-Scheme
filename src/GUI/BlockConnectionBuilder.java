@@ -38,7 +38,7 @@ public class BlockConnectionBuilder extends Line {
 
     public void setUiStart(BlockComponent component, Port output) {
         uiStart = component;
-        connection.start = output;
+        connection.setStart(output);
         startXProperty().bind(component.layoutXProperty());
         startYProperty().bind(component.layoutYProperty());
 
@@ -46,7 +46,7 @@ public class BlockConnectionBuilder extends Line {
 
     public void setUiEnd(BlockComponent component, Port input) {
         uiEnd = component;
-        connection.end = input;
+        connection.setEnd(input);
         endXProperty().bind(component.layoutXProperty());
         endYProperty().bind(component.layoutYProperty());
     }

@@ -1,6 +1,12 @@
 package GUI;
 
+import blockscheme.BlockAdd;
+import blockscheme.BlockYYMakeAB;
+import jdk.nashorn.internal.ir.Block;
+
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class BlockSchemeGui {
     ArrayList<Cable> scheme = new ArrayList<Cable>();
@@ -53,30 +59,25 @@ public class BlockSchemeGui {
      * Start blocks are blocks that have no connections on their inputs
      * End blocks are block that have no connections on their outputs
      */
-    public static void FindEnds() {
-        ArrayList<BlockComponent> AllBlocksStart = (ArrayList<BlockComponent>) AllBlocks.clone();
+    public static ArrayList<BlockComponent> FindEnds() {
         ArrayList<BlockComponent> AllBlocksEnd = (ArrayList<BlockComponent>) AllBlocks.clone();
+        for (BlockComponent block :
+                AllBlocks) {
+            if (HasConnectedOutput(block))
+                AllBlocksEnd.remove(block);
+        }
+        return AllBlocksEnd;
+    }
+
+    public static ArrayList<BlockComponent> FindStarts()
+    {
+        ArrayList<BlockComponent> AllBlocksStart = (ArrayList<BlockComponent>) AllBlocks.clone();
         for (BlockComponent block :
                 AllBlocks) {
             if (HasConnectedInput(block))
                 AllBlocksStart.remove(block);
-
-            if (HasConnectedOutput(block))
-                AllBlocksEnd.remove(block);
         }
-
-
-        System.out.printf("Starts:\n");
-        for (BlockComponent ba :
-                AllBlocksStart) {
-            System.out.printf(ba.name + "\n");
-//            ba.Active(true);
-        }
-        System.out.printf("Ends:\n");
-        for (BlockComponent ba :
-                AllBlocksEnd) {
-            System.out.printf(ba.name + "\n");
-        }
+        return AllBlocksStart;
     }
 
     /**
@@ -113,6 +114,8 @@ public class BlockSchemeGui {
             if (bcb.getUiEnd().equals(block))
                 if (!bcb.getUiStart().IsReady())
                     return false;
+//                else
+//                    bcb.getUiStart().Active(1);
         }
         return true;
     }
@@ -142,7 +145,7 @@ public class BlockSchemeGui {
         }
     }
 
-    public static void PropagateBlock(BlockComponent block){
+    public static void PropagateBlock(BlockComponent block) {
         for (BlockConnectionBuilder bcb :
                 BCBList) {
             if (bcb.getUiStart().equals(block))
@@ -150,16 +153,14 @@ public class BlockSchemeGui {
         }
     }
 
-    public static void Step()
-    {
+    public static void Step() {
         for (BlockComponent block :
-            AllBlocks) {
+                AllBlocks) {
             block.Step();
         }
     }
 
-    public static void MakeCalculationPath()
-    {
+    public static void MakeCalculationPath() {
         for (BlockComponent block :
                 AllBlocks) {
             if (AreInputsReady(block)) {
@@ -173,12 +174,32 @@ public class BlockSchemeGui {
         Step();
     }
 
-    public static void ResetCalculation()
-    {
+    public static void ResetCalculation() {
         for (BlockComponent block :
                 AllBlocks) {
-                block.ResetBlock();
+            block.ResetBlock();
 
         }
+    }
+
+    public static void SetBlockPins(BlockComponent block)
+    {
+        for (int i = 0; i < block.GetPortNames().size(); i++) {
+            //block.Active(true);
+            for (String pin :
+                    block.GetPins(i)) {
+                block.SetPin(i, pin, Double.parseDouble(JOptionPane.showInputDialog(String.format("Set Pin (%s) for block (%s green):", pin, block.name))));
+            }
+            //block.Active(false);
+        }
+    }
+
+    public static void FeedStarts()
+    {
+        ArrayList<BlockComponent> starts = FindStarts();
+        for (BlockComponent block:
+        starts){
+            SetBlockPins(block);
+    }
     }
 }
