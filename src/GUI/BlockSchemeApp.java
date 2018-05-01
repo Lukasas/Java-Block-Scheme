@@ -35,7 +35,9 @@ public class BlockSchemeApp extends Application {
         add(BlockSub.class);
         add(BlockMul.class);
         add(BlockDiv.class);
+        add(BlockABMinusABIsY.class);
     }};
+
 
     public static void main(String[] args) {
         launch(args);
