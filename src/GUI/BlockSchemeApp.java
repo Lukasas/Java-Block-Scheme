@@ -1,5 +1,7 @@
 package GUI;
 
+import blockscheme.BlockAdd;
+import blockscheme.BlockYYMakeAB;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -36,15 +38,21 @@ public class BlockSchemeApp extends Application {
         buttonBlockAdd.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockComponent buttonBlockAddw = new BlockComponent();
-                buttonBlockAdd.setPrefSize(100, 20);
+                BlockComponent buttonBlockAddw = new BlockComponent(new BlockAdd());
                 canvas.getChildren().add(buttonBlockAddw);
             }
         });
 
-        Button buttonProjected = new Button("BlockSub");
-        buttonProjected.setPrefSize(100, 20);
-        blockControls.getChildren().addAll(buttonBlockAdd, buttonProjected);
+        Button buttonBlockYYAB = new Button("BlockYYMakeAB");
+        buttonBlockYYAB.setPrefSize(100, 20);
+        buttonBlockYYAB.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockComponent buttonBlockYYAB = new BlockComponent(new BlockYYMakeAB());
+                canvas.getChildren().add(buttonBlockYYAB);
+            }
+        });
+        blockControls.getChildren().addAll(buttonBlockAdd, buttonBlockYYAB);
     }
 
     private void CreateBlockDebug() {
@@ -57,15 +65,28 @@ public class BlockSchemeApp extends Application {
         buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockSchemeGui.ListAll();
+                BlockSchemeGui.ResetCalculation();
             }
         });
 
         Button buttonStep = new Button("Step");
         buttonStep.setPrefSize(100, 20);
+        buttonStep.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockSchemeGui.MakeCalculationPath();
+            }
+        });
 
-        Button buttonReset = new Button("Reset");
+        Button buttonReset = new Button("Reset (Find Ends)");
         buttonReset.setPrefSize(100, 20);
+        buttonReset.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockSchemeGui.FindEnds();
+            }
+        });
+
         debugControls.getChildren().addAll(buttonRun, buttonStep, buttonReset);
     }
 
@@ -94,16 +115,5 @@ public class BlockSchemeApp extends Application {
 
         stage.setScene(scene);
         stage.show();
-//        Line redLine = LineBuilder.create()
-//                .startX(296)
-//                .startY(128)
-//                .endX(401)
-//                .endY(233)
-//                .fill(Color.RED)
-//                .stroke(Color.RED)
-//                .strokeWidth(10.0f)
-//                .build();
-//
-//        canvas.getChildren().add(redLine);
     }
 }

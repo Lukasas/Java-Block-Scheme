@@ -25,32 +25,25 @@ public class BlockYYMakeAB extends BaseBlock {
         input.add(y0);
         input.add(y1);
         output.add(ab);
-
+        y0.setY(5.0f);
+        name = "BlockYYMakeAB";
     }
 
-    public void SetInput(int index, Port p) {
-        if (index >= input.size())
-            throw new RuntimeException("Setting input index out of range.");
-
-        input.get(index).CopyData(p);
-    }
-
-    public void SetOutput(int index, Port p) {
-        if (index >= output.size())
-            throw new RuntimeException("Setting output index out of range.");
-
-        output.get(index).CopyData(p);
-    }
-
-    public String TextOuptut()
-    {
-        return String.format("Inputs:\n\tY(0): %f\n\tY(1): %f\nOutputs:\n\tAB: (%f, %f)", y0.getY(), y1.getY(), ab.getA(), ab.getB());
-    }
 
     @Override
-    public void calculate() throws Exception {
-        super.calculate();
+    public String TextOutput()
+    {
+        BlockTextOutput.set(String.format("Inputs:\n\tY(0): %f\n\tY(1): %f\nOutputs:\n\tAB: (%f, %f)", y0.getY(), y1.getY(), ab.getA(), ab.getB()));
+        return BlockTextOutput.get();
+    }
+
+
+    @Override
+    public void calculate() {
+
         ab.setA(y0.getY());
         ab.setB(y1.getY());
+
+        super.calculate(); // THIS MUST BE CALLED AT THE VERY END OF CALCULATE TO PROPAGATE VALUES INTO OUTPUT !!
     }
 }

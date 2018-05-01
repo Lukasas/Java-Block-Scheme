@@ -1,6 +1,5 @@
 package GUI;
 
-import javafx.beans.property.DoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -11,65 +10,95 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 
 import javafx.scene.control.ContextMenu;
 
 public class BlockComponent extends Label {
+    private BlockComponent me;
     private BaseBlock block;
     private final double[] dragDelta = new double[2];
-    private BlockComponent me;
-    private final ContextMenu contextMenu = new ContextMenu();
-    private static int counter = 0;
+    private final ContextMenu contextMenuInputs = new ContextMenu();
+    private final ContextMenu contextMenuOutputs = new ContextMenu();
+
     private static boolean connecting = false;
 
-    public BlockComponent input;
-    public BlockComponent output;
-
-
-
     public String name;
+    private boolean valueReady = false;
+    private boolean valueReadyTemp = false;
+
+    private boolean active = false;
 
     private static BlockConnectionBuilder BCB;
 
-    private void SetTooltipText()
-    {
-        getTooltip().setText("Input X: 5\nOutput Y: -5");
+    private void SetTooltipText() {
+        if (getTooltip() == null)
+            setTooltip(new Tooltip());
+        getTooltip().textProperty().bind(block.blockTextOutputProperty());
     }
 
-    private void CreatePins()
-    {
-
+    private int GetIndexFromMenuItem(Object item) {
+        MenuItem i = ((MenuItem) item);
+        return Integer.valueOf(i.getText().substring(0, i.getText().indexOf(' ')));
     }
 
-    
+    private void CreatePins() {
+        for (int i = 0; i < block.GetInputNames().size(); i++) {
+            MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetInputNames().get(i)));
+            item.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    connecting = false; // This will cause problems later when user click an actual action, there is no skip.
+                    BCB.setUiEnd(me, block.GetInput(GetIndexFromMenuItem(event.getSource())));
+                    BlockSchemeGui.AddBCB(BCB);
+                    ((Pane) getParent()).getChildren().add(BCB);
+                    event.consume();
+                }
+            });
+            contextMenuInputs.getItems().add(item);
+        }
+        for (int i = 0; i < block.GetOutputNames().size(); i++) {
+            MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetOutputNames().get(i)));
+            item.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    connecting = true;
+                    BCB = new BlockConnectionBuilder();
+                    BCB.setUiStart(me, block.GetOutput(GetIndexFromMenuItem(event.getSource())));
+                    event.consume();
+                }
+            });
+            contextMenuOutputs.getItems().add(item);
+        }
 
-    public BlockComponent(/*BaseBlock block*/) {
-        this.block = block;
-        MenuItem item = new MenuItem("Input X");
-        MenuItem item2 = new MenuItem("Output Y");
+        // Remove Button for Blocks
+        MenuItem item = new MenuItem("Remove");
         item.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if (!connecting) {
-                    if (BCB == null) {
-                        BCB = new BlockConnectionBuilder();
-                        ((Pane) getParent()).getChildren().add(BCB);
-
-                    }
-                    connecting = true;
-                    BCB.setUiStart(me);
-                }
+                BlockSchemeGui.RemoveBlock(me);
             }
         });
 
-        name = "Test " + String.valueOf(counter++);
-        contextMenu.getItems().addAll(item, item2);
-        setTooltip(new Tooltip("Tooltip Test"));
-        SetTooltipText();
-        setText("Hey");
+        contextMenuOutputs.getItems().add(item);
+    }
+
+    public void Step()
+    {
+        this.valueReady = this.valueReadyTemp;
+        this.valueReadyTemp = false;
+    }
+
+    public BlockComponent(BaseBlock block) {
         me = this;
-//		this.block = block;
+        this.block = block;
+        BlockSchemeGui.AddBlock(this);
+        CreatePins();
+        SetTooltipText();
+
+        setText(block.GetName());
+        name = block.GetName();
+        Active(false);
         setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -78,23 +107,26 @@ public class BlockComponent extends Label {
                         dragDelta[0] = me.getLayoutX() - event.getSceneX();
                         dragDelta[1] = me.getLayoutY() - event.getSceneY();
                         me.setCursor(Cursor.MOVE);
+                        block.calculate();
                         break;
                     case SECONDARY: {
-                        if (!connecting) {
-                            contextMenu.show(me, event.getScreenX(), event.getScreenY());
-                        }
+                        if (connecting)
+                            contextMenuInputs.show(me, event.getScreenX(), event.getScreenY());
+                        else
+                            contextMenuOutputs.show(me, event.getScreenX(), event.getScreenY());
+
                     }
                     break;
                 }
             }
         });
 
+        // Moving with the component in scene.
         setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY: {
-
                         me.setLayoutX(event.getSceneX() + dragDelta[0]);
                         me.setLayoutY(event.getSceneY() + dragDelta[1]);
                         if (((Pane) me.getParent()).getWidth() < (me.getLayoutX() + me.getWidth())) {
@@ -118,25 +150,55 @@ public class BlockComponent extends Label {
             }
         });
 
+
         setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 switch (event.getButton()) {
                     case PRIMARY:
                         me.setCursor(Cursor.DEFAULT);
-                        break;
-                    case SECONDARY:
-                        if (connecting) {
-                            connecting = false;
-                            BCB.setUiEnd(me);
-                            BlockSchemeGui.AddBCB(BCB);
-                            BCB = null;
-                        }
+                        BlockSchemeGui.GetBlockInputConnectors(me);
+                        BlockSchemeGui.GetBlockOutputConnectors(me);
                         break;
                 }
             }
         });
+    }
 
+    public void CalculateBlock() {
+        block.calculate();
+        valueReadyTemp = true;
+    }
 
+    public void ResetBlock()
+    {
+        valueReady = false;
+        valueReadyTemp = false;
+        Active(false);
+    }
+
+    public boolean IsReady()
+    {
+        return valueReady;
+    }
+
+    public void RefreshMe()
+    {
+        block.TextOutput();
+    }
+
+    public void RemoveMe()
+    {
+        ((Pane)getParent()).getChildren().remove(me);
+    }
+
+    public void Active(boolean active)
+    {
+        if (active)
+            setStyle("-fx-background-color: #ffCCCA; -fx-padding: 10 10 10 10");
+        else
+            setStyle("-fx-background-color: #ffffff; -fx-padding: 10 10 10 10");
+
+        this.active = active;
     }
 }
