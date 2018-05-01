@@ -95,23 +95,6 @@ public class BlockComponent extends Label {
         BlockSchemeGui.AddBlock(this);
         CreatePins();
         SetTooltipText();
-        /*MenuItem item = new MenuItem("Input X");
-        MenuItem item2 = new MenuItem("Output Y");
-        item.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                if (!connecting) {
-                    if (BCB == null) {
-                        BCB = new BlockConnectionBuilder();
-                        ((Pane) getParent()).getChildren().add(BCB);
-
-                    }
-                    connecting = true;
-                    BCB.setUiStart(me);
-                }
-            }
-        });*/
-
 
         setText(block.GetName());
         name = block.GetName();
@@ -180,17 +163,18 @@ public class BlockComponent extends Label {
                 }
             }
         });
-
     }
 
     public void CalculateBlock() {
         block.calculate();
-        valueReady = true;
+        valueReadyTemp = true;
     }
 
     public void ResetBlock()
     {
         valueReady = false;
+        valueReadyTemp = false;
+        Active(false);
     }
 
     public boolean IsReady()
@@ -216,6 +200,5 @@ public class BlockComponent extends Label {
             setStyle("-fx-background-color: #ffffff; -fx-padding: 10 10 10 10");
 
         this.active = active;
-        this.valueReadyTemp = active;
     }
 }

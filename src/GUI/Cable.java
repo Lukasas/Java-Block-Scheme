@@ -15,6 +15,8 @@ public class Cable {
         end = null; // This might get useful for determining end point.
     }
 
+
+
     /**
      * This method serves for propagating data from start into end like pipeline.
      */

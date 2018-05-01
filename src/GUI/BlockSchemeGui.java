@@ -142,20 +142,31 @@ public class BlockSchemeGui {
         }
     }
 
+    public static void PropagateBlock(BlockComponent block){
+        for (BlockConnectionBuilder bcb :
+                BCBList) {
+            if (bcb.getUiStart().equals(block))
+                bcb.Propagate();
+        }
+    }
+
     public static void Step()
     {
         for (BlockComponent block :
             AllBlocks) {
-        block.Step();
-    }
+            block.Step();
+        }
     }
 
     public static void MakeCalculationPath()
     {
         for (BlockComponent block :
                 AllBlocks) {
-            if (AreInputsReady(block))
+            if (AreInputsReady(block)) {
+                block.CalculateBlock();
+                PropagateBlock(block);
                 block.Active(true);
+            }
 
         }
 
@@ -166,7 +177,7 @@ public class BlockSchemeGui {
     {
         for (BlockComponent block :
                 AllBlocks) {
-                block.Active(false);
+                block.ResetBlock();
 
         }
     }
