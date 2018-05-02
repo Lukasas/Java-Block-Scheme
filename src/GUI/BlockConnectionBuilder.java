@@ -67,6 +67,7 @@ public class BlockConnectionBuilder extends Line {
         connection.setEnd(input);
         endXProperty().bind(PinPosX);
         endYProperty().bind(PinPosY);
+        BlockSchemeGui.stepButton.setDisable(true);
         return true;
     }
 

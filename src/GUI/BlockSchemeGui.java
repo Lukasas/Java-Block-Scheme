@@ -2,6 +2,7 @@ package GUI;
 
 import blockscheme.BlockAdd;
 import blockscheme.BlockYYMakeAB;
+import javafx.scene.control.Button;
 import jdk.nashorn.internal.ir.Block;
 
 import javax.swing.*;
@@ -9,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class BlockSchemeGui {
+
+    public static Button stepButton;
+
     ArrayList<Cable> scheme = new ArrayList<Cable>();
     static ArrayList<BlockConnectionBuilder> BCBList = new ArrayList<>();
     static ArrayList<BlockComponent> AllBlocks = new ArrayList<>();

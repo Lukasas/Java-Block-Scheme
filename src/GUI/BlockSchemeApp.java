@@ -23,6 +23,7 @@ public class BlockSchemeApp extends Application {
     private VBox debugControls;
     private Pane canvas;
 
+    private Button buttonStart, buttonStep, buttonReset;
 
     /// Creating New block in few easy steps:
     /// 1. Create new file in blockscheme with block name like BlockMul
@@ -71,6 +72,7 @@ public class BlockSchemeApp extends Application {
                             BaseBlock bb = (BaseBlock) obj;
                             BlockComponent buttonBlock = new BlockComponent(bb);
                             canvas.getChildren().add(buttonBlock);
+                            buttonStep.setDisable(true);
 
                         } catch (Exception ex) {
                             System.out.printf("I broke it... " + ex.getMessage());
@@ -97,14 +99,15 @@ public class BlockSchemeApp extends Application {
         debugControls.setPadding(new Insets(15, 12, 15, 12));
         debugControls.setSpacing(10);
         debugControls.setStyle("-fx-background-color: #336699;");
-        Button buttonRun = new Button("Start");
-        buttonRun.setPrefSize(100, 20);
-        buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
+        buttonStart = new Button("Start");
+        buttonStart.setPrefSize(100, 20);
+        buttonStart.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
                 if (!BlockSchemeGui.CheckForCycles()) {
                     BlockSchemeGui.ResetCalculation();
                     BlockSchemeGui.FeedPins();
+                    buttonStep.setDisable(false);
                 }
                 else {
                     JOptionPane.showMessageDialog(null, "Scheme contains cycles!", "Connection Error", JOptionPane.ERROR_MESSAGE);
@@ -112,8 +115,10 @@ public class BlockSchemeApp extends Application {
             }
         });
 
-        Button buttonStep = new Button("Step");
+        buttonStep = new Button("Step");
+        BlockSchemeGui.stepButton = buttonStep;
         buttonStep.setPrefSize(100, 20);
+        buttonStep.setDisable(true);
         buttonStep.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -121,7 +126,7 @@ public class BlockSchemeApp extends Application {
             }
         });
 
-        Button buttonReset = new Button("Reset");
+        buttonReset = new Button("Reset");
         buttonReset.setPrefSize(100, 20);
         buttonReset.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -130,7 +135,7 @@ public class BlockSchemeApp extends Application {
             }
         });
 
-        debugControls.getChildren().addAll(buttonRun, buttonStep, buttonReset);
+        debugControls.getChildren().addAll(buttonStart, buttonStep, buttonReset);
     }
 
     /**
