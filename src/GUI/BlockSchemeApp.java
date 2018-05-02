@@ -14,6 +14,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import javax.swing.*;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 
@@ -101,8 +102,13 @@ public class BlockSchemeApp extends Application {
         buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockSchemeGui.ResetCalculation();
-                BlockSchemeGui.FeedPins();
+                if (!BlockSchemeGui.CheckForCycles()) {
+                    BlockSchemeGui.ResetCalculation();
+                    BlockSchemeGui.FeedPins();
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "Scheme contains cycles!", "Connection Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 

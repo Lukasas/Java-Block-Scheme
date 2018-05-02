@@ -210,8 +210,10 @@ public class BlockSchemeGui {
 
     /**
      * Makes calculation for block that are currently marked for calculation.
+     * @return Number of blocks that were calculated.
      */
-    public static void MakeCalculationPath() {
+    public static int MakeCalculationPath() {
+        int numBlocks = 0;
         for (BlockComponent block :
                 AllBlocks) {
             if (!block.IsReady()) {
@@ -219,12 +221,27 @@ public class BlockSchemeGui {
                     block.CalculateBlock();
                     PropagateBlock(block);
                     block.Active(2);
+                    numBlocks++;
                 }
             }
-
         }
-
         Step();
+        return numBlocks;
+    }
+
+    /**
+     * Counts block that are not ready.
+     * @return Number of blocks that aren't ready.
+     */
+    public static int NonReadyBlocks() {
+        int numBlocks = 0;
+        for (BlockComponent block :
+                AllBlocks) {
+            if (!block.IsReady()) {
+                    numBlocks++;
+            }
+        }
+        return numBlocks;
     }
 
     /**
@@ -235,6 +252,38 @@ public class BlockSchemeGui {
                 AllBlocks) {
             block.ResetBlock();
         }
+    }
+
+    /**
+     * Checks for cycles in the scheme.
+     * @return True if scheme contains cycle. False otherwise.
+     */
+    public static boolean CheckForCycles() {
+
+//        for (int i = 0; i < AllBlocks.size(); i++) {
+//            for (BlockComponent block :
+//                    AllBlocks) {
+//                for (BlockConnectionBuilder bcb :
+//                        BCBList) {
+//                    if (bcb.getUiStart().equals(block))
+//                        if (!block.IsReady())
+//                            if (bcb.getUiStart().IsReady()) {
+//                                ResetCalculation();
+//                                block.ErrorStyle();
+//                                bcb.getUiStart().ErrorStyle();
+//                                return true;
+//                            }
+//                }
+//            }
+//        }
+//        ResetCalculation();
+//        return false;
+
+        while (MakeCalculationPath() > 0);
+
+        if (NonReadyBlocks() > 0)
+            return true;
+        return false;
     }
 
     /**
