@@ -36,6 +36,7 @@ public class BlockSchemeApp extends Application {
         add(BlockMul.class);
         add(BlockDiv.class);
         add(BlockABMinusABIsY.class);
+        add(BlockAnd.class);
     }};
 
 

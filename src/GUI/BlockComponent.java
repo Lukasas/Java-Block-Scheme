@@ -1,6 +1,8 @@
 package GUI;
 
 import blockscheme.ports.Port;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -25,6 +27,11 @@ public class BlockComponent extends Label {
     private final double[] dragDelta = new double[2];
     private final ContextMenu contextMenuInputs = new ContextMenu();
     private final ContextMenu contextMenuOutputs = new ContextMenu();
+
+    private ArrayList<DoubleProperty> InPinsPosX = new ArrayList<>();
+    private ArrayList<DoubleProperty> InPinsPosY = new ArrayList<>();
+    private ArrayList<DoubleProperty> OutPinsPosX = new ArrayList<>();
+    private ArrayList<DoubleProperty> OutPinsPosY = new ArrayList<>();
 
     private static boolean connecting = false;
 
@@ -61,11 +68,14 @@ public class BlockComponent extends Label {
     private void CreateGUIPorts() {
         for (int i = 0; i < block.GetInputNames().size(); i++) {
             MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetInputNames().get(i)));
+            InPinsPosX.add(new SimpleDoubleProperty());
+            InPinsPosY.add(new SimpleDoubleProperty());
             item.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     connecting = false; // This will cause problems later when user click an actual action, there is no skip.
-                    if (BCB.setUiEnd(me, block.GetInput(GetIndexFromMenuItem(event.getSource())))) {
+                    int Index = GetIndexFromMenuItem(event.getSource());
+                    if (BCB.setUiEnd(me, block.GetInput(Index), InPinsPosX.get(Index), InPinsPosY.get(Index))) {
                         BlockSchemeGui.AddBCB(BCB);
                         ((Pane) getParent()).getChildren().add(BCB);
                     }
@@ -80,12 +90,15 @@ public class BlockComponent extends Label {
         }
         for (int i = 0; i < block.GetOutputNames().size(); i++) {
             MenuItem item = new MenuItem(String.format("%d - %s", i, block.GetOutputNames().get(i)));
+            OutPinsPosX.add(new SimpleDoubleProperty());
+            OutPinsPosY.add(new SimpleDoubleProperty());
             item.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
                     connecting = true;
                     BCB = new BlockConnectionBuilder();
-                    BCB.setUiStart(me, block.GetOutput(GetIndexFromMenuItem(event.getSource())));
+                    int Index = GetIndexFromMenuItem(event.getSource());
+                    BCB.setUiStart(me, block.GetOutput(Index), OutPinsPosX.get(Index), OutPinsPosY.get(Index));
                     event.consume();
                 }
             });
@@ -102,6 +115,38 @@ public class BlockComponent extends Label {
         });
 
         contextMenuOutputs.getItems().add(item);
+    }
+
+
+    /**
+     * Updataes pins positions according to Block Position
+     */
+    public void SetPinPositions()
+    {
+        double x = getLayoutX();
+        double endX = x + getWidth();
+        double y = getLayoutY();
+
+        double ySpacingIn = getHeight() / (InPinsPosY.size() + 1);
+        double ySpacingOut = getHeight() / (OutPinsPosY.size() + 1);
+
+        for (DoubleProperty prop :
+                InPinsPosX) {
+            prop.set(x);
+        }
+
+        for (int i = 0; i < InPinsPosY.size(); i++) {
+            InPinsPosY.get(i).set(y + ySpacingIn * (i + 1));
+        }
+
+        for (DoubleProperty prop :
+                OutPinsPosX) {
+            prop.set(endX);
+        }
+
+        for (int i = 0; i < OutPinsPosY.size(); i++) {
+            OutPinsPosY.get(i).set(y + ySpacingOut * (i + 1));
+        }
     }
 
     /**
@@ -151,6 +196,7 @@ public class BlockComponent extends Label {
     {
         this.valueReady = this.valueReadyTemp;
     }
+
 
     public BlockComponent(BaseBlock block) {
         me = this;
@@ -203,6 +249,7 @@ public class BlockComponent extends Label {
                         } else if (0 > me.getLayoutY()) {
                             me.setLayoutY(0);
                         }
+                        SetPinPositions();
                     }
                     break;
                     case SECONDARY: {

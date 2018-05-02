@@ -2,6 +2,7 @@ package GUI;
 
 
 import blockscheme.ports.Port;
+import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -44,11 +45,13 @@ public class BlockConnectionBuilder extends Line {
      * @param component Block that will be defined as start
      * @param output Block's port that will be bind.
      */
-    public void setUiStart(BlockComponent component, Port output) {
+    public void setUiStart(BlockComponent component, Port output, DoubleProperty PinPosX, DoubleProperty PinPosY) {
         uiStart = component;
         connection.setStart(output);
-        startXProperty().bind(component.layoutXProperty());
-        startYProperty().bind(component.layoutYProperty());
+        /*startXProperty().bind(component.layoutXProperty());
+        startYProperty().bind(component.layoutYProperty());*/
+        startXProperty().bind(PinPosX);
+        startYProperty().bind(PinPosY);
 
     }
 
@@ -57,13 +60,13 @@ public class BlockConnectionBuilder extends Line {
      * @param component Block that will be defined as end
      * @param input Block's port that will be bind.
      */
-    public boolean setUiEnd(BlockComponent component, Port input) {
+    public boolean setUiEnd(BlockComponent component, Port input, DoubleProperty PinPosX, DoubleProperty PinPosY) {
         if (!connection.CanEnd(input))
             return false;
         uiEnd = component;
         connection.setEnd(input);
-        endXProperty().bind(component.layoutXProperty());
-        endYProperty().bind(component.layoutYProperty());
+        endXProperty().bind(PinPosX);
+        endYProperty().bind(PinPosY);
         return true;
     }
 
