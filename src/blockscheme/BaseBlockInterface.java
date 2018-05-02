@@ -1,43 +1,55 @@
 package blockscheme;
-import blockscheme.Port;
+import blockscheme.ports.Port;
+
 import java.util.ArrayList;
+
 public interface BaseBlockInterface
 {
-	/**
-	* This method sets input port.
-	* @return Nothing.
-	*/
-	public void setInput(Port port);
+    /**
+     * Method that serves for determining input Ports
+     * @return Name of input ports;
+     */
+    ArrayList<String> GetInputNames();
 
-	/**
-	* This method creates input and output port.
-	* @return Nothing.
-	*/
-	public void createPorts();
+    /**
+     * Method that serves for determining output Ports
+     * @return Name of output ports;
+     */
+    ArrayList<String> GetOutputNames();
 
-	/**
-	* This method returns output port.
-	* @return Port
-	*/
-	public Port getOutput();
+    /**
+     * Copies data into input port
+     * @param index Index of input port
+     * @param p Port with data
+     */
+    void SetInput(int index, Port p);
 
-	/**
-	* This method returns input port.
-	* @return Port
-	*/
-	public Port getInput();
+    /**
+     * Copies data into output port ... Should never be used.
+     * @param index Index of output port
+     * @param p Port with data
+     */
+    void SetOutput(int index, Port p);
 
-	/**
-	* This method returns size of output. (Type)
-	* @return Int size of output
-	*/
-	public int outputSize();
+    /**
+     * Get Port of selected index.
+     * @param index Index in ArrayList of the port to be returned
+     * @return Port object that can be used in propagation.
+     */
+    Port GetInput(int index);
 
-	/**
-	* This method returns size of input. (Type)
-	* @return Int size of input
-	*/
-	public int inputSize();
+    /**
+     * Calculated output Port
+     * @param index Index in ArrayList of the port to be returned
+     * @return Calculated values in Port
+     */
+    Port GetOutput(int index);
+
+    /**
+     * Creates text output for each block.
+     * @return Text output for calculation.
+     */
+    String TextOutput();
 
 	/**
 	* This method calculates outputs value accordingly to the inputs.
@@ -45,5 +57,24 @@ public interface BaseBlockInterface
 	* Can throw exceptions according to blocks calculations.
 	* @return Nothing
 	*/
-	public void calculate() throws Exception;
+	void calculate();
+
+    /**
+     * Method for recieving block name.
+     * @return Block name.
+     */
+	String GetName();
+
+    /**
+     * Sets value of selected Point and selected Pin
+     * @param PortIndex Port it's Pin is going to be changed
+     * @param Pin Pin it's value is going to be changed
+     * @param value Value for the pin.
+     */
+    void SetInputPortPin(int PortIndex, String Pin, double value);
+
+    /**
+     * Resets all ports to 0.0
+     */
+    void ResetPorts();
 }

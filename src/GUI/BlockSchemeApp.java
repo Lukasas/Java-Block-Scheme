@@ -1,5 +1,6 @@
 package GUI;
 
+import blockscheme.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -12,9 +13,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.LineBuilder;
-import javafx.scene.paint.Color;
+
+import java.lang.reflect.*;
+import java.util.ArrayList;
 
 public class BlockSchemeApp extends Application {
     private HBox blockControls;
@@ -22,53 +23,114 @@ public class BlockSchemeApp extends Application {
     private Pane canvas;
 
 
+    /// Creating New block in few easy steps:
+    /// 1. Create new file in blockscheme with block name like BlockMul
+    /// 2. Copy an existing block like BlockAdd
+    /// 3. Change Ports and Calculation
+    /// 4. Add block name in ArrayList below.
+    /// Ready2Go
+    static ArrayList<Class<?>> AllBlocksType = new ArrayList<Class<?>>() {{
+        add(BlockAdd.class);
+        add(BlockYYMakeAB.class);
+        add(BlockSub.class);
+        add(BlockMul.class);
+        add(BlockDiv.class);
+        add(BlockABMinusABIsY.class);
+        add(BlockAnd.class);
+    }};
+
+
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Creates HBox that is filled with buttons for creating block. Also links these blocks with buttons components.
+     */
     private void CreateBlockSection() {
         blockControls = new HBox();
         blockControls.setPadding(new Insets(15, 12, 15, 12));
         blockControls.setSpacing(10);
         blockControls.setStyle("-fx-background-color: #336699;");
-        Button buttonBlockAdd = new Button("BlockAdd");
-        buttonBlockAdd.setPrefSize(100, 20);
-        buttonBlockAdd.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                BlockComponent buttonBlockAddw = new BlockComponent();
-                buttonBlockAdd.setPrefSize(100, 20);
-                canvas.getChildren().add(buttonBlockAddw);
-            }
-        });
 
-        Button buttonProjected = new Button("BlockSub");
-        buttonProjected.setPrefSize(100, 20);
-        blockControls.getChildren().addAll(buttonBlockAdd, buttonProjected);
+        try {
+            for (Class<?> cName :
+                    AllBlocksType) {
+
+                Class<?> clazz = Class.forName(cName.getName());
+                Constructor<?> ctor = clazz.getConstructor();
+                Button buttonMaker = new Button(cName.getSimpleName());
+//                buttonMaker.setPrefSize(100, 20);
+                buttonMaker.setPadding(new Insets(5, 12, 5, 12));
+                buttonMaker.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        try {
+                            Object obj = ctor.newInstance(new Object[]{});
+                            BaseBlock bb = (BaseBlock) obj;
+                            BlockComponent buttonBlock = new BlockComponent(bb);
+                            canvas.getChildren().add(buttonBlock);
+
+                        } catch (Exception ex) {
+                            System.out.printf("I broke it... " + ex.getMessage());
+                            throw new RuntimeException("Exception when creating block!!");
+                        }
+
+
+                    }
+                });
+                blockControls.getChildren().add(buttonMaker);
+            }
+        } catch (Exception ex) {
+            System.out.printf("I broke it... " + ex.getMessage());
+            throw new RuntimeException("Exception when creating button!!");
+        }
+
     }
 
+    /**
+     * Creates Debug menu with Start, Step and Reset
+     */
     private void CreateBlockDebug() {
         debugControls = new VBox();
         debugControls.setPadding(new Insets(15, 12, 15, 12));
         debugControls.setSpacing(10);
         debugControls.setStyle("-fx-background-color: #336699;");
-        Button buttonRun = new Button("Run");
+        Button buttonRun = new Button("Start");
         buttonRun.setPrefSize(100, 20);
         buttonRun.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                BlockSchemeGui.ListAll();
+                BlockSchemeGui.ResetCalculation();
+                BlockSchemeGui.FeedPins();
             }
         });
 
         Button buttonStep = new Button("Step");
         buttonStep.setPrefSize(100, 20);
+        buttonStep.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockSchemeGui.MakeCalculationPath();
+            }
+        });
 
         Button buttonReset = new Button("Reset");
         buttonReset.setPrefSize(100, 20);
+        buttonReset.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                BlockSchemeGui.ResetCalculation();
+            }
+        });
+
         debugControls.getChildren().addAll(buttonRun, buttonStep, buttonReset);
     }
 
+    /**
+     * Creates whole GUI.
+     * @param stage Stage from main
+     */
     @Override
     public void start(Stage stage) {
         Group root = new Group();
@@ -94,16 +156,5 @@ public class BlockSchemeApp extends Application {
 
         stage.setScene(scene);
         stage.show();
-//        Line redLine = LineBuilder.create()
-//                .startX(296)
-//                .startY(128)
-//                .endX(401)
-//                .endY(233)
-//                .fill(Color.RED)
-//                .stroke(Color.RED)
-//                .strokeWidth(10.0f)
-//                .build();
-//
-//        canvas.getChildren().add(redLine);
     }
 }

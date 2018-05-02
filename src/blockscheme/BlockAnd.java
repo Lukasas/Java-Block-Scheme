@@ -14,15 +14,15 @@ import blockscheme.ports.ABPort;
 import blockscheme.ports.YPort;
 
 
-public class BlockDiv extends BaseBlock {
+public class BlockAnd extends BaseBlock {
     ABPort ab;
     YPort y;
-    public BlockDiv() {
+    public BlockAnd() {
         ab = new ABPort();
         y = new YPort();
         input.add(ab);
         output.add(y);
-        name = "BlockDiv";
+        name = "BlockAnd";
     }
 
     @Override
@@ -33,7 +33,7 @@ public class BlockDiv extends BaseBlock {
 
     @Override
     public void calculate() {
-        y.setY(ab.getA() / ab.getB());
+        y.setY((int)ab.getA() & (int)ab.getB());
         super.calculate();
     }
 }

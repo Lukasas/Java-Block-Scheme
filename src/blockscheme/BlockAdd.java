@@ -1,26 +1,39 @@
 package blockscheme;
-import blockscheme.BaseBlock;
-import blockscheme.Port;
 
-import java.util.ArrayList;
-public class BlockAdd extends BaseBlock
-{
-	public BlockAdd()
-	{
-		this.name = "BlockAdd";
-		this.createPorts();
+
+/*
+	A ----
+	       \
+	         ---- Y
+		   /
+	B ----
+
+ */
+
+import blockscheme.ports.ABPort;
+import blockscheme.ports.YPort;
+
+
+public class BlockAdd extends BaseBlock {
+	ABPort ab;
+	YPort y;
+	public BlockAdd() {
+		ab = new ABPort();
+		y = new YPort();
+		input.add(ab);
+		output.add(y);
+        name = "BlockAdd";
 	}
 
-	public BlockAdd(double val1, double val2)
-	{
-		this.createPorts();
-		this.input.set("A", val1);
-		this.input.set("B", val2);
-	}
+    @Override
+    public String TextOutput() {
+        BlockTextOutput.set(String.format("Inputs:\n\tAB: (%f, %f)\nOutputs:\n\tY(0): %f", ab.getA(), ab.getB(), y.getY()));
+        return BlockTextOutput.get();
+    }
 
-	@Override
-	public void calculate() throws Exception
-	{		
-		this.output.set("Y", this.input.get("A") + this.input.get("B"));
+    @Override
+	public void calculate() {
+		y.setY(ab.getA() + ab.getB());
+        super.calculate();
 	}
 }
