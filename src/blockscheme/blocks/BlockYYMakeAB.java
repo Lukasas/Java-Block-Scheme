@@ -1,4 +1,4 @@
-package blockscheme;
+package blockscheme.blocks;
 
 
 
@@ -11,7 +11,7 @@ package blockscheme;
 
  */
 
-import blockscheme.ports.*;
+import blockscheme.blocks.ports.*;
 
 public class BlockYYMakeAB extends BaseBlock {
     private YPort y0;

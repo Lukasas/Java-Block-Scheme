@@ -1,5 +1,5 @@
-package blockscheme;
-import blockscheme.ports.Port;
+package blockscheme.blocks;
+import blockscheme.blocks.ports.Port;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -87,8 +87,6 @@ public class BaseBlock implements BaseBlockInterface {
      * It contains the calculation formula.
      * In every child class the super.calculate() must be called at the very end of the calculate function.
      * It's important for values propagation into output.
-     *
-     * @return Nothing
      */
     @Override
     public void calculate() {

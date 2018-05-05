@@ -1,4 +1,4 @@
-package blockscheme;
+package blockscheme.blocks;
 
 
 /*
@@ -10,8 +10,8 @@ package blockscheme;
 
  */
 
-import blockscheme.ports.ABPort;
-import blockscheme.ports.YPort;
+import blockscheme.blocks.ports.ABPort;
+import blockscheme.blocks.ports.YPort;
 
 
 public class BlockAdd extends BaseBlock {

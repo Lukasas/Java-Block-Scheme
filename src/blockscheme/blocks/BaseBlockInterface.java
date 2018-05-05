@@ -1,5 +1,8 @@
-package blockscheme;
-import blockscheme.ports.Port;
+/**
+ * This package works with everything, that belongs to blocks and it's classes.
+ */
+package blockscheme.blocks;
+import blockscheme.blocks.ports.Port;
 
 import java.util.ArrayList;
 
@@ -55,7 +58,6 @@ public interface BaseBlockInterface
 	* This method calculates outputs value accordingly to the inputs.
 	* It contains the calculation formula.
 	* Can throw exceptions according to blocks calculations.
-	* @return Nothing
 	*/
 	void calculate();
 

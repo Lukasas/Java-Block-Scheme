@@ -1,4 +1,4 @@
-package blockscheme.ports;
+package blockscheme.blocks.ports;
 
 public class YPort extends Port {
 

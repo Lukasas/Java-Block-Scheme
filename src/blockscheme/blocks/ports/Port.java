@@ -1,4 +1,7 @@
-package blockscheme.ports;
+/**
+ * This package works with ports and it's insides.
+ */
+package blockscheme.blocks.ports;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +13,7 @@ public class Port {
     /**
      * Makes text from the Port and it's numbers.
      *
-     * @return
+     * @return Returns formated text of port insides
      */
     public String PortText() {
         String temp = "";
@@ -109,6 +112,9 @@ public class Port {
         return nazev.compareTo(name) == 0;
     }
 
+    /**
+     * Resets port insides to 0.0
+     */
     public void Reset() {
         for (Map.Entry<String, Double> entry :
                 data.entrySet()) {
