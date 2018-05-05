@@ -3,20 +3,16 @@
 		Project for creating block schemes with computations.
 	</description>
 
-  <property name="main-class" value="GUI.BlockSchemeApp" />
+  <property name="main-class" value="blockscheme.GUI.BlockSchemeApp" />
   <!-- Folders dynamically created. -->
 	<property name="build" location="build" />
 	<property name="dest" location="dest" />
 	<property name="doc" location="doc" />
   <!-- Static folders -->
-  <property name="src" location="src" />
+    <property name="src" location="src" />
+    <property name="tests" location="tests" />
 	<property name="lib" location="lib" />
-  <!--
-  <property name="jar" location="${build}/jar" />
-  <property name="classes" location="${build}/classes" />
-  <property name="jar" location="${build}" />
-  <property name="classes" location="${build}" />
-  -->
+
 
   <path id="classpath">
     <fileset dir="${lib}" includes="**/*.jar" />
@@ -25,12 +21,16 @@
 
 	<target name="init" description="Creates the folder structure if missing.">
     <delete dir="${build}" />
-    <!-- <delete dir="${doc}" /> -->
+    <delete dir="${doc}" />
     <delete dir="${dest}" />
 		<mkdir dir="${build}" />
-		<!-- <mkdir dir="${doc}" /> -->
+		<mkdir dir="${doc}" />
     <mkdir dir="${dest}" />
 	</target>
+
+    <target name="doc" description="Generate documentation for project">
+        <javadoc sourcepath="${src}" destdir="${doc}" />
+    </target>
 
 	<target name="compile" depends="clean,init" description="Compile the source code.">
 		<javac srcdir="${src}" destdir="${build}" classpathref="classpath" />
@@ -70,7 +70,10 @@
     </java>
   </target>
 
-  <target name="test" description="Run tests">
+
+
+
+    <target name="test" description="Run tests">
     <junit printsummary="yes">
       <formatter type="plain" usefile="false" />
       <classpath>
@@ -79,11 +82,12 @@
       </classpath>
 
       <batchtest fork="yes">
-        <fileset dir="${src}" includes="**/*_test.java"/>
+        <fileset dir="${tests}" includes="**/*_test.java"/>
       </batchtest>
     </junit>
   </target>
 
 	<target name="clean" depends="init" description="Cleans up built files." />
   <target name="main" depends="clean,run" />
+
 </project>

@@ -1,14 +1,13 @@
-package GUI;
+package blockscheme.GUI;
 
 
-import blockscheme.ports.Port;
+import blockscheme.blocks.ports.Port;
 import javafx.beans.property.DoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import sun.security.ssl.Debug;
 
 public class BlockConnectionBuilder extends Line {
     private BlockComponent uiStart; // Output
@@ -44,6 +43,8 @@ public class BlockConnectionBuilder extends Line {
      * Sets start of this connection and bind it's start to a block.
      * @param component Block that will be defined as start
      * @param output Block's port that will be bind.
+     * @param PinPosX Property that will the cable be bound to X
+     * @param PinPosY Property that will the cable be bound to Y
      */
     public void setUiStart(BlockComponent component, Port output, DoubleProperty PinPosX, DoubleProperty PinPosY) {
         uiStart = component;
@@ -59,6 +60,9 @@ public class BlockConnectionBuilder extends Line {
      * Sets end of this connection and bind it's start to a block.
      * @param component Block that will be defined as end
      * @param input Block's port that will be bind.
+     * @param PinPosX Property that will the cable be bound to X
+     * @param PinPosY Property that will the cable be bound to Y
+     * @return True if connection is possible, false otherwise.
      */
     public boolean setUiEnd(BlockComponent component, Port input, DoubleProperty PinPosX, DoubleProperty PinPosY) {
         if (!connection.CanEnd(input))
@@ -72,7 +76,7 @@ public class BlockConnectionBuilder extends Line {
     }
 
     /**
-     * Returns start block from GUI
+     * Returns start block from blockscheme.GUI
      * @return Start block
      */
     public BlockComponent getUiStart() {
@@ -80,7 +84,7 @@ public class BlockConnectionBuilder extends Line {
     }
 
     /**
-     * Returns end block from GUI
+     * Returns end block from blockscheme.GUI
      * @return End block
      */
     public BlockComponent getUiEnd() {

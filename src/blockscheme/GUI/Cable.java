@@ -1,6 +1,6 @@
-package GUI;
+package blockscheme.GUI;
 
-import blockscheme.ports.Port;
+import blockscheme.blocks.ports.Port;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

@@ -1,6 +1,7 @@
-package GUI;
+package blockscheme.GUI;
 
-import blockscheme.ports.Port;
+import blockscheme.blocks.BaseBlock;
+import blockscheme.blocks.ports.Port;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.ActionEvent;
@@ -8,7 +9,6 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 
 
-import blockscheme.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tooltip;
@@ -321,7 +321,7 @@ public class BlockComponent extends Label {
 
     /**
      * Sets this block to active means coloring it with proper color.
-     * @param active Index of active 0 - not active, > 0 - active
+     * @param active Index of active 0 - not active, bigger than 0 - active
      */
     public void Active(int active)
     {

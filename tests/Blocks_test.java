@@ -2,13 +2,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 // import static org.junit.Assert.assertNotNull;
 // import org.junit.rules.ExpectedException;
- 
-import org.junit.Test;
 
-import blockscheme.BlockAdd;
-import blockscheme.BlockSub;
-import blockscheme.BlockMul;
-import blockscheme.BlockDiv;
 
 public class Blocks_test
 {

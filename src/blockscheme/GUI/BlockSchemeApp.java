@@ -1,6 +1,10 @@
-package GUI;
+/**
+ * This package serves for everything connected to GUI.
+ * It also connects blocks and ports together and presents them on the screen.
+ */
+package blockscheme.GUI;
 
-import blockscheme.*;
+import blockscheme.blocks.*;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -139,7 +143,7 @@ public class BlockSchemeApp extends Application {
     }
 
     /**
-     * Creates whole GUI.
+     * Creates whole blockscheme.GUI.
      * @param stage Stage from main
      */
     @Override

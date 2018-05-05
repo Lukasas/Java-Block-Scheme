@@ -1,13 +1,9 @@
-package GUI;
+package blockscheme.GUI;
 
-import blockscheme.BlockAdd;
-import blockscheme.BlockYYMakeAB;
 import javafx.scene.control.Button;
-import jdk.nashorn.internal.ir.Block;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class BlockSchemeGui {
 
@@ -30,7 +26,7 @@ public class BlockSchemeGui {
 
     /**
      * Removes all connections for a block in scheme.
-     * @param Block Block from GUI
+     * @param Block Block from blockscheme.GUI
      */
     public static void RemoveBCB(BlockComponent Block) {
         ArrayList<BlockConnectionBuilder> BCBListTemp = (ArrayList<BlockConnectionBuilder>) BCBList.clone();
@@ -44,7 +40,7 @@ public class BlockSchemeGui {
 
     /**
      * Removes an actual connection between blocks. Only single one.
-     * @param BCB
+     * @param BCB Connection to be removed
      */
     public static void RemoveBCB(BlockConnectionBuilder BCB) {
         BCBList.remove(BCB);
@@ -61,7 +57,7 @@ public class BlockSchemeGui {
 
     /**
      * Removes an block from scheme. Also removes all it's connections.
-     * @param Block Block from GUI
+     * @param Block Block from blockscheme.GUI
      */
     public static void RemoveBlock(BlockComponent Block) {
         RemoveBCB(Block);
@@ -71,7 +67,7 @@ public class BlockSchemeGui {
 
     /**
      * Adds a block into scheme.
-     * @param Block Block from GUI
+     * @param Block Block from blockscheme.GUI
      */
     public static void AddBlock(BlockComponent Block) {
         AllBlocks.add(Block);
@@ -80,6 +76,7 @@ public class BlockSchemeGui {
     /**
      * Find End point
      * End blocks are block that have no connections on their outputs
+     * @return ArrayList of Block components that has been found
      */
     public static ArrayList<BlockComponent> FindEnds() {
         ArrayList<BlockComponent> AllBlocksEnd = (ArrayList<BlockComponent>) AllBlocks.clone();
@@ -94,6 +91,7 @@ public class BlockSchemeGui {
     /**
      * Find Start point
      * Start blocks are blocks that have no connections on their inputs
+     * @return ArrayList of Block components that has been found
      */
     public static ArrayList<BlockComponent> FindStarts()
     {
@@ -292,7 +290,7 @@ public class BlockSchemeGui {
 
     /**
      * Checks if block's pin is connected.
-     * @param block Block from GUI
+     * @param block Block from blockscheme.GUI
      * @param PinIndex Index of the Pin
      * @return True if is connected. False otherwise.
      */
@@ -314,7 +312,7 @@ public class BlockSchemeGui {
 
     /**
      * Checks all pins and pops up a box for input a value.
-     * @param block Block from GUI
+     * @param block Block from blockscheme.GUI
      */
     public static void SetBlockPins(BlockComponent block)
     {

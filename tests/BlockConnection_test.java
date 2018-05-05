@@ -3,9 +3,6 @@ import static org.junit.Assert.assertTrue;
  
 import org.junit.Test;
 
-import blockscheme.BlockAdd;
-import blockscheme.BlockSub;
-
 public class BlockConnection_test
 {
 	@Test
