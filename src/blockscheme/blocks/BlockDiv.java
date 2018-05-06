@@ -26,12 +26,6 @@ public class BlockDiv extends BaseBlock {
     }
 
     @Override
-    public String TextOutput() {
-        BlockTextOutput.set(String.format("Inputs:\n\tAB: (%f, %f)\nOutputs:\n\tY(0): %f", ab.getA(), ab.getB(), y.getY()));
-        return BlockTextOutput.get();
-    }
-
-    @Override
     public void calculate() {
         y.setY(ab.getA() / ab.getB());
         super.calculate();

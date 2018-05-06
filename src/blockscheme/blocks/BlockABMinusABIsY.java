@@ -29,12 +29,6 @@ public class BlockABMinusABIsY extends BaseBlock {
     }
 
     @Override
-    public String TextOutput() {
-        BlockTextOutput.set(String.format("Inputs:\n\tAB: (%f, %f)\n\tAB: (%f, %f)\nOutputs:\n\tY(0): %f", ab.getA(), ab.getB(), ab0.getA(), ab0.getB(), y.getY()));
-        return BlockTextOutput.get();
-    }
-
-    @Override
     public void calculate() {
         y.setY(ab.getA() + ab.getB() - (ab0.getA() + ab0.getB()));
         super.calculate();

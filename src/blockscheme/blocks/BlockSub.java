@@ -25,11 +25,6 @@ public class BlockSub extends BaseBlock {
         name = "BlockSub";
     }
 
-    @Override
-    public String TextOutput() {
-        BlockTextOutput.set(String.format("Inputs:\n\tAB: (%f, %f)\nOutputs:\n\tY(0): %f", ab.getA(), ab.getB(), y.getY()));
-        return BlockTextOutput.get();
-    }
 
     @Override
     public void calculate() {

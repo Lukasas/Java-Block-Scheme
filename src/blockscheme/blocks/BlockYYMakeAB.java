@@ -30,14 +30,6 @@ public class BlockYYMakeAB extends BaseBlock {
 
 
     @Override
-    public String TextOutput()
-    {
-        BlockTextOutput.set(String.format("Inputs:\n\tY(0): %f\n\tY(1): %f\nOutputs:\n\tAB: (%f, %f)", y0.getY(), y1.getY(), ab.getA(), ab.getB()));
-        return BlockTextOutput.get();
-    }
-
-
-    @Override
     public void calculate() {
 
         ab.setA(y0.getY());

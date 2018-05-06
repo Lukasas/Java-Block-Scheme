@@ -21,7 +21,28 @@ public class BaseBlock implements BaseBlockInterface {
 
     @Override
     public String TextOutput() {
-        return null;
+        String building = "Inputs:";
+        for (int i = 0; i < input.size(); i++) {
+            building += "\n\t" + input.get(i).getName() + ": (";
+            for (String keyName :
+                    input.get(i).getKeys()) {
+                building += String.format("%f, ", input.get(i).get(keyName));
+            }
+            building = building.substring(0, building.length() - 2);
+            building += ")";
+        }
+        building += "\nOutputs:";
+        for (int i = 0; i < output.size(); i++) {
+            building += "\n\t" + output.get(i).getName() + ": (";
+            for (String keyName :
+                    output.get(i).getKeys()) {
+                building += String.format("%f, ", output.get(i).get(keyName));
+            }
+            building = building.substring(0, building.length() - 2);
+            building += ")";
+        }
+        BlockTextOutput.set(building);
+        return building;
     }
 
     @Override

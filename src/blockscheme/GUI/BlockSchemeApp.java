@@ -43,6 +43,7 @@ public class BlockSchemeApp extends Application {
         add(BlockDiv.class);
         add(BlockABMinusABIsY.class);
         add(BlockAnd.class);
+        add(BlockRGBTOYAB.class);
     }};
 
 
