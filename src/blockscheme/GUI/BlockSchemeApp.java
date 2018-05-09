@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Group;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -18,7 +19,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-import javax.swing.*;
 import java.lang.reflect.*;
 import java.util.ArrayList;
 
@@ -115,7 +115,7 @@ public class BlockSchemeApp extends Application {
                     buttonStep.setDisable(false);
                 }
                 else {
-                    JOptionPane.showMessageDialog(null, "Scheme contains cycles!", "Connection Error", JOptionPane.ERROR_MESSAGE);
+                    BlockSchemeGui.ShowAlertDialog("Scheme contains cycles!", "Connection Error", Alert.AlertType.ERROR);
                 }
             }
         });

@@ -9,15 +9,10 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 
 
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-import javafx.scene.control.ContextMenu;
-
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -81,7 +76,7 @@ public class BlockComponent extends Label {
                     }
                     else
                     {
-                        JOptionPane.showMessageDialog(null, "Wrong connection!", "Connection Error", JOptionPane.ERROR_MESSAGE);
+                        BlockSchemeGui.ShowAlertDialog("Wrong connection!", "Connection Error", Alert.AlertType.ERROR);
                     }
                     event.consume();
                 }
@@ -329,6 +324,8 @@ public class BlockComponent extends Label {
             setStyle("-fx-background-color: #b5bbFF; -fx-padding: 10 10 10 10");
         else if(active == 2)
             setStyle("-fx-background-color: #CCFFCA; -fx-padding: 10 10 10 10");
+        else if(active == 3)
+            setStyle("-fx-background-color: #FFCCCA; -fx-padding: 10 10 10 10");
         else
             setStyle("-fx-background-color: #ffffff; -fx-padding: 10 10 10 10");
 
