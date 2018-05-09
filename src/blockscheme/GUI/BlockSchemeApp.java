@@ -27,7 +27,7 @@ public class BlockSchemeApp extends Application {
     private VBox debugControls;
     private Pane canvas;
 
-    private Button buttonStart, buttonStep, buttonReset;
+    private Button buttonStart, buttonStep, buttonReset, buttonSave, buttonLoad;
 
     /// Creating New block in few easy steps:
     /// 1. Create new file in blockscheme with block name like BlockMul
@@ -140,7 +140,25 @@ public class BlockSchemeApp extends Application {
             }
         });
 
-        debugControls.getChildren().addAll(buttonStart, buttonStep, buttonReset);
+        buttonSave = new Button("Save");
+        buttonSave.setPrefSize(100, 20);
+        buttonSave.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                FManager.Save();
+            }
+        });
+
+        buttonLoad = new Button("Load");
+        buttonLoad.setPrefSize(100, 20);
+        buttonLoad.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                FManager.Load();
+            }
+        });
+
+        debugControls.getChildren().addAll(buttonStart, buttonStep, buttonReset, buttonSave, buttonLoad);
     }
 
     /**

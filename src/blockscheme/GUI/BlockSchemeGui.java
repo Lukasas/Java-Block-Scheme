@@ -1,9 +1,11 @@
 package blockscheme.GUI;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.TextInputDialog;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class BlockSchemeGui {
 
@@ -310,6 +312,21 @@ public class BlockSchemeGui {
         return connected;
     }
 
+    public static double ShowDialog(String dialogText)
+    {
+        TextInputDialog dialog = new TextInputDialog("0");
+        dialog.setTitle("Setting Pins");
+        dialog.setHeaderText(dialogText);
+        dialog.setContentText("Value:");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent())
+        {
+            return Double.parseDouble(result.get());
+        }
+        return 0.0;
+    }
+
     /**
      * Checks all pins and pops up a box for input a value.
      * @param block Block from blockscheme.GUI
@@ -317,13 +334,13 @@ public class BlockSchemeGui {
     public static void SetBlockPins(BlockComponent block)
     {
         for (int i = 0; i < block.GetPortNames().size(); i++) {
-            //block.Active(true);
+            block.Active(true);
             for (String pin :
                     block.GetPins(i)) {
                 if (!IsBlockPinConnected(block, i))
-                    block.SetPin(i, pin, Double.parseDouble(JOptionPane.showInputDialog(String.format("Set Pin (%s) for block (%s):", pin, block.name))));
+                    block.SetPin(i, pin, ShowDialog(String.format("Set Pin (%s) for block (%s):", pin, block.name)));
             }
-            //block.Active(false);
+            block.Active(false);
         }
     }
 

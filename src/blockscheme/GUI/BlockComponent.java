@@ -333,6 +333,8 @@ public class BlockComponent extends Label {
             setStyle("-fx-background-color: #ffffff; -fx-padding: 10 10 10 10");
 
         this.active = (active != 0);
+
+
     }
 
     /**
