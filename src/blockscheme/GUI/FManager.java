@@ -1,6 +1,7 @@
 package blockscheme.GUI;
 
 import blockscheme.blocks.*;
+import com.sun.glass.ui.Application;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
@@ -12,15 +13,21 @@ import java.io.*;
 import java.nio.ByteBuffer;
 
 public class FManager {
+    static File lastDirUsed = null;
+
     public static boolean Save(Stage app) {
         FileChooser fc = new FileChooser();
         fc.setTitle("Saving file");
+        if (lastDirUsed != null)
+            fc.setInitialDirectory(lastDirUsed.getParentFile());
         fc.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Block Schemes", "*.jbsf"));
 
         File selectedFile = fc.showSaveDialog(app);
         if (selectedFile == null)
             return false;
+
+        lastDirUsed = selectedFile;
 
         try {
             FileOutputStream fos = new FileOutputStream(selectedFile.getAbsolutePath(), false);
@@ -70,9 +77,15 @@ public class FManager {
             b.write(block.GetBlockClass().getName().getBytes());
             b.write("\n".getBytes());
             // Id, X, Y
-            b.write(IntToByte(block.GetID()));
-            b.write(DoubleToByte(block.getLayoutX()));
-            b.write(DoubleToByte(block.getLayoutY()));
+            int ID = block.GetID();
+            double X = block.getLayoutX(), Y = block.getLayoutY();
+            byte[] intBuffer = IntToByte(ID);
+            byte[] doubleBuffer = DoubleToByte(X);
+            b.write(intBuffer, 0, 4);
+            b.write(doubleBuffer, 0, 8);
+
+            doubleBuffer = DoubleToByte(Y);
+            b.write(doubleBuffer, 0, 8);
             b.write("\n".getBytes());
         }
         b.write("Split\n".getBytes());
@@ -89,7 +102,6 @@ public class FManager {
                     b.write(IntToByte(bcb.GetStartPinIndex()));
                     b.write(IntToByte(bcb.getUiEnd().GetID()));
                     b.write(IntToByte(bcb.GetEndPinIndex()));
-                    b.write("\n".getBytes());
             }
         }
 
@@ -101,6 +113,8 @@ public class FManager {
     public static boolean Load(Stage app, Pane canvas)
     {
         FileChooser fc = new FileChooser();
+        if (lastDirUsed != null)
+            fc.setInitialDirectory(lastDirUsed.getParentFile());
         fc.setTitle("Opening file");
         fc.getExtensionFilters().add(
                 new FileChooser.ExtensionFilter("Block Schemes", "*.jbsf"));
@@ -109,18 +123,40 @@ public class FManager {
         if (selectedFile == null)
             return false;
 
+        lastDirUsed = selectedFile;
+        ByteArrayOutputStream b = new ByteArrayOutputStream();
+        byte[] intBuffer = new byte[4];
+        byte[] doubleBuffer = new byte[8];
         try {
             FileInputStream fis = new FileInputStream(selectedFile.getAbsolutePath());
-            BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
-            String line;
-            while (!(line = reader.readLine()).contentEquals("Split")) {
+            while (true) {
 
-                BlockComponent block = new BlockComponent(BlockSchemeApp.CreateInstanceByName(line));
-                line = reader.readLine();
+                String name = "";
 
-                int ID = ByteToInt(line.substring(0, 4).getBytes());
-                double X = ByteToDouble(line.substring(4, 12).getBytes()),
-                        Y = ByteToDouble(line.substring(12).getBytes());
+                // pull name
+                int cur;
+                while ((cur = fis.read()) != 10)
+                {
+                    b.write(cur);
+                }
+                name = b.toString();
+                if (name.contentEquals("Split"))
+                {
+                    break;
+                }
+                b.reset();
+                BlockComponent block = new BlockComponent(BlockSchemeApp.CreateInstanceByName(name));
+
+                int ID;
+                double X,Y;
+
+                fis.read(intBuffer);
+                ID = ByteToInt(intBuffer);
+                fis.read(doubleBuffer);
+                X = ByteToDouble(doubleBuffer);
+                fis.read(doubleBuffer);
+                Y = ByteToDouble(doubleBuffer);
+                fis.read();
 
                 BlockSchemeGui.AddBlock(block, ID);
                 canvas.getChildren().add(block);
@@ -128,11 +164,22 @@ public class FManager {
                 block.setLayoutY(Y);
             }
 
-            while ((line = reader.readLine()) != null) {
-                int FromBlock = ByteToInt(line.substring(0,4).getBytes()),
-                        FromPin = ByteToInt(line.substring(4,8).getBytes()),
-                        ToBlock = ByteToInt(line.substring(8,12).getBytes()),
-                        ToPin = ByteToInt(line.substring(12).getBytes());
+            while (true) {
+
+                int FromBlock, FromPin, ToBlock , ToPin;
+                if (fis.read(intBuffer) == -1)
+                    break;
+                FromBlock = ByteToInt(intBuffer);
+
+                fis.read(intBuffer);
+                FromPin = ByteToInt(intBuffer);
+
+                fis.read(intBuffer);
+                ToBlock = ByteToInt(intBuffer);
+
+                fis.read(intBuffer);
+                ToPin = ByteToInt(intBuffer);
+
                 BlockConnectionBuilder BCB = new BlockConnectionBuilder();
                 BCB.setUiStart(BlockSchemeGui.FindBlockById(FromBlock), FromPin);
                 BCB.setUiEnd(BlockSchemeGui.FindBlockById(ToBlock), ToPin);

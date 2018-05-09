@@ -118,13 +118,19 @@ public class BlockSchemeApp extends Application {
         buttonStart.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (!BlockSchemeGui.CheckForCycles()) {
-                    BlockSchemeGui.ResetCalculation();
-                    BlockSchemeGui.FeedPins();
-                    buttonStep.setDisable(false);
+                if (BlockSchemeGui.AllBlocks.size() == 0)
+                {
+                    BlockSchemeGui.ShowAlertDialog("No blocks !", "Error", Alert.AlertType.ERROR);
                 }
                 else {
-                    BlockSchemeGui.ShowAlertDialog("Scheme contains cycles!", "Connection Error", Alert.AlertType.ERROR);
+
+                    if (!BlockSchemeGui.CheckForCycles()) {
+                        BlockSchemeGui.ResetCalculation();
+                        BlockSchemeGui.FeedPins();
+                        buttonStep.setDisable(false);
+                    } else {
+                        BlockSchemeGui.ShowAlertDialog("Scheme contains cycles!", "Connection Error", Alert.AlertType.ERROR);
+                    }
                 }
             }
         });
@@ -163,10 +169,11 @@ public class BlockSchemeApp extends Application {
         buttonLoad.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (BlockSchemeGui.ShowAlertDialog("Would you like to save your scheme ?", "Loading", Alert.AlertType.CONFIRMATION) == ButtonType.OK)
-                {
-                    FManager.Save(stage);
-                }
+                if (BlockSchemeGui.AllBlocks.size() > 0)
+                    if (BlockSchemeGui.ShowAlertDialog("Would you like to save your scheme ?", "Loading", Alert.AlertType.CONFIRMATION) == ButtonType.OK)
+                    {
+                        FManager.Save(stage);
+                    }
 
                 BlockSchemeGui.ClearScheme();
                 FManager.Load(stage, canvas);
@@ -181,6 +188,7 @@ public class BlockSchemeApp extends Application {
                 if (BlockSchemeGui.ShowAlertDialog("ARE YOU SURE TO DELETE ALL BLOCKS IN SCHEME ?", "Scheme Clear", Alert.AlertType.CONFIRMATION) == ButtonType.OK)
                 {
                     BlockSchemeGui.ClearScheme();
+                    buttonStep.setDisable(true);
                 }
             }
         });
@@ -202,8 +210,8 @@ public class BlockSchemeApp extends Application {
         CreateBlockSection();
         CreateBlockDebug();
         stage.setTitle("Block Scheme");
-        stage.setWidth(800);
-        stage.setHeight(600);
+        stage.setWidth(1440);
+        stage.setHeight(960);
 
         BorderPane border = new BorderPane();
         border.prefHeightProperty().bind(scene.heightProperty());
