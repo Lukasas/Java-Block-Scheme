@@ -48,6 +48,8 @@ public class BlockSchemeApp extends Application {
         add(BlockABMinusABIsY.class);
         add(BlockAnd.class);
         add(BlockRGBTOYAB.class);
+        add(BlockRKStep.class);
+        add(BlockStepTime.class);
     }};
 
 
