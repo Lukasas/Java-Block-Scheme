@@ -12,12 +12,14 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
@@ -27,7 +29,9 @@ public class BlockSchemeApp extends Application {
     private VBox debugControls;
     private Pane canvas;
 
-    private Button buttonStart, buttonStep, buttonReset, buttonSave, buttonLoad;
+    private Button buttonStart, buttonStep, buttonReset, buttonSave, buttonLoad, buttonClear;
+
+    private Stage stage;
 
     /// Creating New block in few easy steps:
     /// 1. Create new file in blockscheme with block name like BlockMul
@@ -47,8 +51,15 @@ public class BlockSchemeApp extends Application {
     }};
 
 
-    public static void main(String[] args) {
-        launch(args);
+    public static void main(String[] args) { launch(args); }
+
+
+    public static BaseBlock CreateInstanceByName(String name) throws NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException
+    {
+        Class<?> clazz = Class.forName(name);
+        Constructor<?> ctor = clazz.getConstructor();
+        Object obj = ctor.newInstance(new Object[]{});
+        return (BaseBlock) obj;
     }
 
     /**
@@ -64,8 +75,7 @@ public class BlockSchemeApp extends Application {
             for (Class<?> cName :
                     AllBlocksType) {
 
-                Class<?> clazz = Class.forName(cName.getName());
-                Constructor<?> ctor = clazz.getConstructor();
+
                 Button buttonMaker = new Button(cName.getSimpleName());
 //                buttonMaker.setPrefSize(100, 20);
                 buttonMaker.setPadding(new Insets(5, 12, 5, 12));
@@ -73,9 +83,8 @@ public class BlockSchemeApp extends Application {
                     @Override
                     public void handle(MouseEvent event) {
                         try {
-                            Object obj = ctor.newInstance(new Object[]{});
-                            BaseBlock bb = (BaseBlock) obj;
-                            BlockComponent buttonBlock = new BlockComponent(bb);
+                            BlockComponent buttonBlock = new BlockComponent(CreateInstanceByName(cName.getName()));
+                            BlockSchemeGui.AddBlock(buttonBlock);
                             canvas.getChildren().add(buttonBlock);
                             buttonStep.setDisable(true);
 
@@ -145,7 +154,7 @@ public class BlockSchemeApp extends Application {
         buttonSave.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                FManager.Save();
+                FManager.Save(stage);
             }
         });
 
@@ -154,11 +163,29 @@ public class BlockSchemeApp extends Application {
         buttonLoad.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                FManager.Load();
+                if (BlockSchemeGui.ShowAlertDialog("Would you like to save your scheme ?", "Loading", Alert.AlertType.CONFIRMATION) == ButtonType.OK)
+                {
+                    FManager.Save(stage);
+                }
+
+                BlockSchemeGui.ClearScheme();
+                FManager.Load(stage, canvas);
+                buttonStep.setDisable(true);
+            }
+        });
+        buttonClear = new Button("Clean Scheme");
+        buttonClear.setPrefSize(100, 20);
+        buttonClear.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if (BlockSchemeGui.ShowAlertDialog("ARE YOU SURE TO DELETE ALL BLOCKS IN SCHEME ?", "Scheme Clear", Alert.AlertType.CONFIRMATION) == ButtonType.OK)
+                {
+                    BlockSchemeGui.ClearScheme();
+                }
             }
         });
 
-        debugControls.getChildren().addAll(buttonStart, buttonStep, buttonReset, buttonSave, buttonLoad);
+        debugControls.getChildren().addAll(buttonStart, buttonStep, buttonReset, buttonSave, buttonLoad, buttonClear);
     }
 
     /**
@@ -169,6 +196,7 @@ public class BlockSchemeApp extends Application {
     public void start(Stage stage) {
         Group root = new Group();
         Scene scene = new Scene(root);
+        this.stage = stage;
         canvas = new Pane();
         canvas.setStyle("-fx-background-color: #BCCCFF;");
         CreateBlockSection();
@@ -190,5 +218,13 @@ public class BlockSchemeApp extends Application {
 
         stage.setScene(scene);
         stage.show();
+
+        stage.setOnCloseRequest((WindowEvent event) -> {
+            if (BlockSchemeGui.AllBlocks.size() > 0)
+                if (BlockSchemeGui.ShowAlertDialog("Would you like to save your scheme ?", "Saving", Alert.AlertType.CONFIRMATION) == ButtonType.OK)
+                {
+                    FManager.Save(stage);
+                }
+        });
     }
 }

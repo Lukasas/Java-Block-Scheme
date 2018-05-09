@@ -14,6 +14,8 @@ public class BlockConnectionBuilder extends Line {
     private BlockComponent uiEnd; // Input
     private Cable connection = new Cable();
     private BlockConnectionBuilder me;
+    private int StartPinIndex;
+    private int EndPinIndex;
 
     public BlockConnectionBuilder() {
         super();
@@ -42,38 +44,55 @@ public class BlockConnectionBuilder extends Line {
     /**
      * Sets start of this connection and bind it's start to a block.
      * @param component Block that will be defined as start
-     * @param output Block's port that will be bind.
-     * @param PinPosX Property that will the cable be bound to X
-     * @param PinPosY Property that will the cable be bound to Y
+     * @param Index Index of Port
      */
-    public void setUiStart(BlockComponent component, Port output, DoubleProperty PinPosX, DoubleProperty PinPosY) {
+    public void setUiStart(BlockComponent component, int Index) {
         uiStart = component;
-        connection.setStart(output);
+        connection.setStart(component.GetOutputPortByIndex(Index));
         /*startXProperty().bind(component.layoutXProperty());
         startYProperty().bind(component.layoutYProperty());*/
-        startXProperty().bind(PinPosX);
-        startYProperty().bind(PinPosY);
+        startXProperty().bind(component.GetStartPinPositionX(Index));
+        startYProperty().bind(component.GetStartPinPositionY(Index));
+        StartPinIndex = Index;
 
     }
 
     /**
      * Sets end of this connection and bind it's start to a block.
      * @param component Block that will be defined as end
-     * @param input Block's port that will be bind.
-     * @param PinPosX Property that will the cable be bound to X
-     * @param PinPosY Property that will the cable be bound to Y
+     * @param Index Index of port
      * @return True if connection is possible, false otherwise.
      */
-    public boolean setUiEnd(BlockComponent component, Port input, DoubleProperty PinPosX, DoubleProperty PinPosY) {
-        if (!connection.CanEnd(input))
+    public boolean setUiEnd(BlockComponent component, int Index) {
+        if (!connection.CanEnd(component.GetInputPortByIndex(Index)))
             return false;
         uiEnd = component;
-        connection.setEnd(input);
-        endXProperty().bind(PinPosX);
-        endYProperty().bind(PinPosY);
+        connection.setEnd(component.GetInputPortByIndex(Index));
+        endXProperty().bind(component.GetEndPinPositionX(Index));
+        endYProperty().bind(component.GetEndPinPositionY(Index));
         BlockSchemeGui.stepButton.setDisable(true);
+        EndPinIndex = Index;
         return true;
     }
+
+    /**
+     * Gives index of start pin.
+     * @return Index of start pin.
+     */
+    public int GetStartPinIndex()
+    {
+        return StartPinIndex;
+    }
+
+    /**
+     * Gives index of end pin.
+     * @return Index of end pin.
+     */
+    public int GetEndPinIndex()
+    {
+        return EndPinIndex;
+    }
+
 
     /**
      * Returns start block from blockscheme.GUI

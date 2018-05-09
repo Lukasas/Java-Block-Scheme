@@ -2,8 +2,10 @@ package blockscheme.GUI;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextInputDialog;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -22,12 +24,13 @@ public class BlockSchemeGui {
     public static void ListAll() {
         for (BlockConnectionBuilder bcb :
                 BCBList) {
-            System.out.println(bcb.getUiStart().name + " " + bcb.getUiEnd().name);
+            System.out.println(bcb.getUiStart().GetName() + " " + bcb.getUiEnd().GetName());
         }
     }
 
     /**
      * Removes all connections for a block in scheme.
+     *
      * @param Block Block from blockscheme.GUI
      */
     public static void RemoveBCB(BlockComponent Block) {
@@ -42,6 +45,7 @@ public class BlockSchemeGui {
 
     /**
      * Removes an actual connection between blocks. Only single one.
+     *
      * @param BCB Connection to be removed
      */
     public static void RemoveBCB(BlockConnectionBuilder BCB) {
@@ -51,7 +55,8 @@ public class BlockSchemeGui {
 
     /**
      * Adds an connection created between blocks. (serves for saving the connection)
-      * @param BCB Connection already created.
+     *
+     * @param BCB Connection already created.
      */
     public static void AddBCB(BlockConnectionBuilder BCB) {
         BCBList.add(BCB);
@@ -59,6 +64,7 @@ public class BlockSchemeGui {
 
     /**
      * Removes an block from scheme. Also removes all it's connections.
+     *
      * @param Block Block from blockscheme.GUI
      */
     public static void RemoveBlock(BlockComponent Block) {
@@ -69,15 +75,57 @@ public class BlockSchemeGui {
 
     /**
      * Adds a block into scheme.
+     *
      * @param Block Block from blockscheme.GUI
+     * @return Id of block
      */
     public static void AddBlock(BlockComponent Block) {
+        AddBlock(Block, FindFreeId());
+    }
+
+    /**
+     * Adds a block into scheme with specific ID.
+     * @param Block Block from blockscheme.GUI
+     * @param ID Id for block
+     * @return Id of block
+     */
+    public static void AddBlock(BlockComponent Block, int ID)
+    {
         AllBlocks.add(Block);
+        Block.SetID(ID);
+    }
+
+    /**
+     * Searches for free ID for block
+     * @return ID that can be assigned to a block
+     */
+    public static int FindFreeId()
+    {
+        int ID = 0;
+
+        while (FindBlockById(ID) != null){ID++;};
+        return ID;
+    }
+
+    /**
+     * Looking for a block with specific ID
+     * @param ID Block to be found
+     * @return Block with specific id or NULL if no block found.
+     */
+    public static BlockComponent FindBlockById(int ID)
+    {
+        for (BlockComponent block :
+                AllBlocks) {
+            if (block.GetID() == ID)
+                return block;
+        }
+        return null;
     }
 
     /**
      * Find End point
      * End blocks are block that have no connections on their outputs
+     *
      * @return ArrayList of Block components that has been found
      */
     public static ArrayList<BlockComponent> FindEnds() {
@@ -93,10 +141,10 @@ public class BlockSchemeGui {
     /**
      * Find Start point
      * Start blocks are blocks that have no connections on their inputs
+     *
      * @return ArrayList of Block components that has been found
      */
-    public static ArrayList<BlockComponent> FindStarts()
-    {
+    public static ArrayList<BlockComponent> FindStarts() {
         ArrayList<BlockComponent> AllBlocksStart = (ArrayList<BlockComponent>) AllBlocks.clone();
         for (BlockComponent block :
                 AllBlocks) {
@@ -116,7 +164,7 @@ public class BlockSchemeGui {
         for (BlockConnectionBuilder bcb :
                 BCBList) {
             if (bcb.getUiEnd().equals(block))
-                System.out.printf(bcb.getUiStart().name + "\n");
+                System.out.printf(bcb.getUiStart().GetName() + "\n");
         }
     }
 
@@ -125,18 +173,22 @@ public class BlockSchemeGui {
      *
      * @param block Block that is being checked for his connectors.
      */
-    public static void GetBlockOutputConnectors(BlockComponent block) {
-        System.out.printf("OutputConnectors:\n");
+    public static ArrayList<BlockConnectionBuilder> GetBlockOutputConnectors(BlockComponent block) {
+        ArrayList<BlockConnectionBuilder> connections =  new ArrayList<>();
         for (BlockConnectionBuilder bcb :
                 BCBList) {
-            if (bcb.getUiStart().equals(block))
-                System.out.printf(bcb.getUiEnd().name + "\n");
+            if (bcb.getUiStart().equals(block)) {
+                System.out.printf("%s -> %s (%d -> %d) (%d -> %d)\n", block.GetName(), bcb.getUiEnd().GetName(), block.GetID(), bcb.getUiEnd().GetID(), bcb.GetStartPinIndex(), bcb.GetEndPinIndex());
+                connections.add(bcb);
+            }
         }
+        return connections;
     }
 
     /**
      * Checks if a block can be computed. Checks all it's inputs if they are ready.
      * Also mark this block that is ready to compute.
+     *
      * @param block Block to be checked for connections.
      * @return True if can be computed.
      */
@@ -154,6 +206,7 @@ public class BlockSchemeGui {
 
     /**
      * Checks if a block has connected all inputs.
+     *
      * @param block Block that will be checked.
      * @return True if it has connected all inputs.
      */
@@ -168,6 +221,7 @@ public class BlockSchemeGui {
 
     /**
      * Checks if a block has connected all outputs.
+     *
      * @param block Block that will be checked.
      * @return True if it has connected all outputs.
      */
@@ -192,6 +246,7 @@ public class BlockSchemeGui {
 
     /**
      * Propagates value from one block to it's output connections.
+     *
      * @param block Block that will propagate it's values.
      */
     public static void PropagateBlock(BlockComponent block) {
@@ -214,6 +269,7 @@ public class BlockSchemeGui {
 
     /**
      * Makes calculation for block that are currently marked for calculation.
+     *
      * @return Number of blocks that were calculated.
      */
     public static int MakeCalculationPath() {
@@ -235,6 +291,7 @@ public class BlockSchemeGui {
 
     /**
      * Counts block that are not ready.
+     *
      * @return Number of blocks that aren't ready.
      */
     public static int NonReadyBlocks() {
@@ -242,7 +299,7 @@ public class BlockSchemeGui {
         for (BlockComponent block :
                 AllBlocks) {
             if (!block.IsReady()) {
-                    numBlocks++;
+                numBlocks++;
             }
         }
         return numBlocks;
@@ -260,6 +317,7 @@ public class BlockSchemeGui {
 
     /**
      * Checks for cycles in the scheme.
+     *
      * @return True if scheme contains cycle. False otherwise.
      */
     public static boolean CheckForCycles() {
@@ -283,7 +341,7 @@ public class BlockSchemeGui {
 //        ResetCalculation();
 //        return false;
 
-        while (MakeCalculationPath() > 0);
+        while (MakeCalculationPath() > 0) ;
 
         if (NonReadyBlocks() > 0)
             return true;
@@ -292,18 +350,17 @@ public class BlockSchemeGui {
 
     /**
      * Checks if block's pin is connected.
-     * @param block Block from blockscheme.GUI
+     *
+     * @param block    Block from blockscheme.GUI
      * @param PinIndex Index of the Pin
      * @return True if is connected. False otherwise.
      */
-    public static boolean IsBlockPinConnected(BlockComponent block, int PinIndex)
-    {
+    public static boolean IsBlockPinConnected(BlockComponent block, int PinIndex) {
         boolean connected = false;
         for (BlockConnectionBuilder bcb :
                 BCBList) {
-            if (bcb.getUiEnd().equals(block))
-            {
-                connected = bcb.IsPinInStartConnected(block.GetPortByIndex(PinIndex));
+            if (bcb.getUiEnd().equals(block)) {
+                connected = bcb.IsPinInStartConnected(block.GetInputPortByIndex(PinIndex));
                 if (connected == true)
                     break;
             }
@@ -312,42 +369,40 @@ public class BlockSchemeGui {
         return connected;
     }
 
-    public static double ShowInputDialog(String dialogText)
-    {
+    public static String ShowInputDialog(String dialogText) {
         TextInputDialog dialog = new TextInputDialog("0");
         dialog.setTitle("Setting Pins");
         dialog.setHeaderText(null);
         dialog.setContentText(dialogText);
 
         Optional<String> result = dialog.showAndWait();
-        if (result.isPresent())
-        {
-            return Double.parseDouble(result.get());
+        if (result.isPresent()) {
+            return result.get();
         }
-        return 0.0;
+        return null;
     }
 
-    public static void ShowAlertDialog(String dialogText, String dialogTitle, Alert.AlertType type)
-    {
+    public static ButtonType ShowAlertDialog(String dialogText, String dialogTitle, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(dialogTitle);
         alert.setHeaderText(null);
         alert.setContentText(dialogText);
-        alert.showAndWait();
+        return alert.showAndWait().get();
+
     }
 
     /**
      * Checks all pins and pops up a box for input a value.
+     *
      * @param block Block from blockscheme.GUI
      */
-    public static void SetBlockPins(BlockComponent block)
-    {
+    public static void SetBlockPins(BlockComponent block) {
         for (int i = 0; i < block.GetPortNames().size(); i++) {
             block.Active(3);
             for (String pin :
                     block.GetPins(i)) {
                 if (!IsBlockPinConnected(block, i))
-                    block.SetPin(i, pin, ShowInputDialog(String.format("Set Pin (%s) for block (%s):", pin, block.name)));
+                    block.SetPin(i, pin, Double.parseDouble(ShowInputDialog(String.format("Set Pin (%s) for block (%s):", pin, block.GetName()))));
             }
             block.Active(false);
         }
@@ -356,12 +411,27 @@ public class BlockSchemeGui {
     /**
      * Starts setting all input ports.
      */
-    public static void FeedPins()
-    {
-        ArrayList<BlockComponent> starts = FindStarts();
-        for (BlockComponent block:
-        AllBlocks){
+    public static void FeedPins() {
+        for (BlockComponent block :
+                AllBlocks) {
             SetBlockPins(block);
+        }
+    }
+
+    public static void ClearScheme()
+    {
+        ArrayList<BlockComponent> starts = (ArrayList<BlockComponent>)AllBlocks.clone();
+        for (BlockComponent block :
+                starts) {
+            RemoveBlock(block);
+        }
+    }
+
+    public static void RefreshPortPositions()
+    {
+        for (BlockComponent block :
+                AllBlocks) {
+            block.SetPinPositions();
         }
     }
 }

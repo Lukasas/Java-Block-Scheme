@@ -30,13 +30,34 @@ public class BlockComponent extends Label {
 
     private static boolean connecting = false;
 
-    public String name;
+    private int id = -1;
+    private String name;
     private boolean valueReady = false;
     private boolean valueReadyTemp = false;
 
     private boolean active = false;
 
     private static BlockConnectionBuilder BCB;
+
+    public Class<?> GetBlockClass()
+    {
+        return block.getClass();
+    }
+
+    public void SetID(int ID)
+    {
+        id = ID;
+    }
+
+    public int GetID()
+    {
+        return id;
+    }
+
+    public String GetName()
+    {
+        return name;
+    }
 
     /**
      * Binds Component's tooltip with block info text for MouseOver tooltips.
@@ -70,7 +91,7 @@ public class BlockComponent extends Label {
                 public void handle(ActionEvent event) {
                     connecting = false; // This will cause problems later when user click an actual action, there is no skip.
                     int Index = GetIndexFromMenuItem(event.getSource());
-                    if (BCB.setUiEnd(me, block.GetInput(Index), InPinsPosX.get(Index), InPinsPosY.get(Index))) {
+                    if (BCB.setUiEnd(me, Index)) {
                         BlockSchemeGui.AddBCB(BCB);
                         ((Pane) getParent()).getChildren().add(BCB);
                     }
@@ -93,7 +114,7 @@ public class BlockComponent extends Label {
                     connecting = true;
                     BCB = new BlockConnectionBuilder();
                     int Index = GetIndexFromMenuItem(event.getSource());
-                    BCB.setUiStart(me, block.GetOutput(Index), OutPinsPosX.get(Index), OutPinsPosY.get(Index));
+                    BCB.setUiStart(me, Index);
                     event.consume();
                 }
             });
@@ -112,6 +133,25 @@ public class BlockComponent extends Label {
         contextMenuOutputs.getItems().add(item);
     }
 
+    public DoubleProperty GetStartPinPositionX(int index)
+    {
+        return OutPinsPosX.get(index);
+    }
+
+    public DoubleProperty GetStartPinPositionY(int index)
+    {
+        return OutPinsPosY.get(index);
+    }
+
+    public DoubleProperty GetEndPinPositionX(int index)
+    {
+        return InPinsPosX.get(index);
+    }
+
+    public DoubleProperty GetEndPinPositionY(int index)
+    {
+        return InPinsPosY.get(index);
+    }
 
     /**
      * Updataes pins positions according to Block Position
@@ -144,15 +184,24 @@ public class BlockComponent extends Label {
         }
     }
 
+
+
     /**
-     * Returns a Port by it's index in block
-     * @param PinIndex Index of the port
+     * Returns an input Port by it's index in block
+     * @param PortIndex Index of the port
      * @return Selected port
      */
-    public Port GetPortByIndex(int PinIndex)
+    public Port GetInputPortByIndex(int PortIndex)
     {
-        return block.GetInput(PinIndex);
+        return block.GetInput(PortIndex);
     }
+
+    /**
+     * Returns an output Port by it's index in block
+     * @param PortIndex Index of the port
+     * @return Selected port
+     */
+    public Port GetOutputPortByIndex(int PortIndex) {return block.GetOutput(PortIndex);}
 
     /**
      * Gets all ports from block.
@@ -196,8 +245,12 @@ public class BlockComponent extends Label {
     public BlockComponent(BaseBlock block) {
         me = this;
         this.block = block;
-        BlockSchemeGui.AddBlock(this);
         CreateGUIPorts();
+
+        this.layoutXProperty().addListener(observable -> SetPinPositions());
+        this.widthProperty().addListener(observable -> SetPinPositions());
+        this.layoutYProperty().addListener(observable -> SetPinPositions());
+        this.heightProperty().addListener(observable -> SetPinPositions());
         SetTooltipText();
 
         setText(block.GetName());
@@ -244,7 +297,6 @@ public class BlockComponent extends Label {
                         } else if (0 > me.getLayoutY()) {
                             me.setLayoutY(0);
                         }
-                        SetPinPositions();
                     }
                     break;
                     case SECONDARY: {
